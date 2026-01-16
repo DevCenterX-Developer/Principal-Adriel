@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-   <meta name="google-site-verification" content="mb2MRjqXYRTiPUGGGk26wfmLH_i9uvn36IegkB04GXw" />
+  <meta name="google-site-verification" content="mb2MRjqXYRTiPUGGGk26wfmLH_i9uvn36IegkB04GXw" />
     <title>Interesante - Elegancia</title>
     <meta name="theme-color" content="#000000">
     
@@ -29,13 +29,11 @@
                         brand: { neon: 'var(--brand-color)' },
                     },
                     animation: {
-                        'ken-burns': 'kenBurns 20s ease-in-out infinite alternate',
                         'slide-up': 'slideUp 0.8s ease-out forwards',
                         'pulse-slow': 'pulse 4s infinite',
                         'fade-in-slow': 'fadeIn 1s ease-in-out',
                     },
                     keyframes: {
-                        kenBurns: { '0%': { transform: 'scale(1.0)' }, '100%': { transform: 'scale(1.25)' } },
                         slideUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
                         fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } }
                     }
@@ -217,6 +215,9 @@
         body.light-mode .relative.z-10 div {
              text-shadow: 0 0 30px rgba(255,255,255,0.9), 0 0 10px rgba(255,255,255,0.5); 
         }
+        
+        /* Cursor especial para imágenes ampliables */
+        .cursor-zoom-in { cursor: zoom-in; }
     </style>
 </head>
 <body class="antialiased selection:bg-brand-neon selection:text-black transition-colors duration-300">
@@ -289,7 +290,11 @@
         }
 
         function cardVideo(post) { return `<div onclick="openPost('${post.id}')" class="mobile-card overflow-hidden group cursor-pointer tap-effect"><div class="relative aspect-video w-full bg-black"><video src="${post.media_url}#t=1.0" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" preload="metadata" muted playsinline></video><div class="play-overlay"><div class="play-icon"><i class="fas fa-play text-black ml-1 text-2xl"></i></div></div></div><div class="p-5"><h3 class="text-xl font-bold text-dynamic font-sans leading-tight mb-2 line-clamp-2">${post.titulo}</h3></div></div>`; }
-        function cardImage(post) { return `<div onclick="openPost('${post.id}')" class="mobile-card relative h-80 lg:h-[500px] overflow-hidden group cursor-pointer tap-effect"><img src="${post.media_url}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onerror="this.src='https://via.placeholder.com/400'"><div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div><div class="absolute bottom-0 p-6"><h3 class="text-3xl font-dancing font-bold text-white leading-tight drop-shadow-lg">${post.titulo}</h3></div></div>`; }
+        
+        // MODIFICADO: Grid visual solo abre post, removida la lógica de doble click aquí
+        function cardImage(post) { 
+            return `<div onclick="openPost('${post.id}')" class="mobile-card relative h-80 lg:h-[500px] overflow-hidden group cursor-pointer tap-effect"><img src="${post.media_url}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onerror="this.src='https://via.placeholder.com/400'"><div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div><div class="absolute bottom-0 p-6"><h3 class="text-3xl font-dancing font-bold text-white leading-tight drop-shadow-lg">${post.titulo}</h3></div></div>`; 
+        }
 
         loadContent();
     </script>
@@ -337,8 +342,8 @@
     <main id="view-home" class="page-view pb-32 pt-14 lg:pt-20">
         <section class="relative h-[85vh] flex flex-col items-center justify-center overflow-hidden bg-black">
             <div class="absolute inset-0 z-0">
-                <!-- IMAGEN HERO DINÁMICA -->
-                <img id="hero-image" src="" class="w-full h-full object-cover opacity-50 animate-ken-burns grayscale hover:grayscale-0 transition-all duration-[2s]">
+                <!-- IMAGEN HERO DINÁMICA (Sin Zoom) -->
+                <img id="hero-image" src="" class="w-full h-full object-cover opacity-50 grayscale hover:grayscale-0 transition-all duration-[2s]">
                 <div id="hero-overlay" class="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-[var(--bg-base)]"></div>
             </div>
             
@@ -436,7 +441,7 @@
         <i id="dock-temporada" onclick="navigateTo('temporada')" class="fas fa-fire text-xl cursor-pointer hover:scale-110 transition-all text-orange-500" title="Temporada"></i>
     </div>
 
-    <!-- MODAL -->
+    <!-- MODAL (Detalle Post) -->
     <div id="info-modal" class="fixed inset-0 z-[100] hidden overflow-y-auto animate-fade-in">
         <button onclick="closeModal()" class="fixed top-4 right-4 z-50 bg-black/50 p-3 rounded-full border border-brand-neon text-brand-neon hover:bg-red-900 hover:border-red-500 hover:text-white transition-colors"><i class="fas fa-times"></i></button>
         <div class="min-h-screen pb-10">
@@ -455,8 +460,26 @@
         </div>
     </div>
 
+    <!-- MODAL PANTALLA COMPLETA (Para Doble Click) -->
+    <div id="fullscreen-modal" class="fixed inset-0 z-[200] hidden bg-black flex items-center justify-center p-0" onclick="closeFullscreen()">
+        <img id="fullscreen-img" src="" class="max-w-full max-h-full object-contain pointer-events-none">
+        <button onclick="closeFullscreen()" class="absolute top-5 right-5 text-white text-3xl opacity-75 hover:opacity-100"><i class="fas fa-times"></i></button>
+    </div>
+
     <!-- UI Logic Scripts -->
     <script>
+        // Lógica de Doble Click (SOLO EN MODAL)
+        window.openFullscreenImage = function(url) {
+            const modal = document.getElementById('fullscreen-modal');
+            const img = document.getElementById('fullscreen-img');
+            img.src = url;
+            modal.classList.remove('hidden');
+        }
+
+        window.closeFullscreen = function() {
+            document.getElementById('fullscreen-modal').classList.add('hidden');
+        }
+
         // Definición de Temas con Imágenes de Fondo Específicas (Rutas Locales)
         const themes = {
             0: { name: 'jan', class: 'theme-jan', icon: 'fa-cube', sub: 'Enero', bg: 'Imagenes/Enero.webp' },
@@ -584,9 +607,6 @@
             }
         }
 
-        // SCROLL LISTENER REMOVIDO para que el dock sea FIJO.
-        // window.addEventListener('scroll', () => { ... }); 
-
         window.toggleMenu = function() {
             const menu = document.getElementById('mobile-menu-overlay');
             if(!menu) return;
@@ -616,8 +636,11 @@
                     </video>
                 `;
             } else {
-                mediaWrapper.className = "w-full h-[50vh] lg:h-[70vh] flex items-center justify-center relative";
-                mediaWrapper.innerHTML = `<img src="${post.media_url}" class="w-full h-full object-contain">`;
+                // IMAGEN DENTRO DEL MODAL (Ajustada para aprovechar espacio sin bordes negros)
+                // Eliminamos altura fija y fondo negro forzado. Usamos max-height alto para PC.
+                mediaWrapper.className = "w-full flex items-center justify-center relative mt-6"; 
+                // Imagen: max-w-full para no salirse, max-h-[85vh] para aprovechar altura en PC, w-auto/h-auto para ratio natural.
+                mediaWrapper.innerHTML = `<img src="${post.media_url}" class="max-w-full max-h-[60vh] lg:max-h-[85vh] object-contain rounded-xl shadow-2xl cursor-zoom-in" ondblclick="openFullscreenImage('${post.media_url}')">`;
             }
             
             document.getElementById('info-modal').classList.remove('hidden');
@@ -638,4 +661,3 @@
     </script>
 </body>
 </html>
-
