@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-  <meta name="google-site-verification" content="mb2MRjqXYRTiPUGGGk26wfmLH_i9uvn36IegkB04GXw" />
-    <title>Interesante</title>
+    <meta name="google-site-verification" content="mb2MRjqXYRTiPUGGGk26wfmLH_i9uvn36IegkB04GXw" />
+    <title>Interesante - Elegancia</title>
     <meta name="theme-color" content="#000000">
     
     <!-- Tailwind CSS & FontAwesome -->
@@ -27,11 +27,14 @@
                     },
                     colors: {
                         brand: { neon: 'var(--brand-color)' },
+                        whatsapp: '#25D366',
+                        whatsappDark: '#128C7E',
                     },
                     animation: {
                         'slide-up': 'slideUp 0.8s ease-out forwards',
                         'pulse-slow': 'pulse 4s infinite',
                         'fade-in-slow': 'fadeIn 1s ease-in-out',
+                        'bounce-slow': 'bounce 2s infinite',
                     },
                     keyframes: {
                         slideUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
@@ -291,7 +294,6 @@
 
         function cardVideo(post) { return `<div onclick="openPost('${post.id}')" class="mobile-card overflow-hidden group cursor-pointer tap-effect"><div class="relative aspect-video w-full bg-black"><video src="${post.media_url}#t=1.0" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" preload="metadata" muted playsinline></video><div class="play-overlay"><div class="play-icon"><i class="fas fa-play text-black ml-1 text-2xl"></i></div></div></div><div class="p-5"><h3 class="text-xl font-bold text-dynamic font-sans leading-tight mb-2 line-clamp-2">${post.titulo}</h3></div></div>`; }
         
-        // MODIFICADO: Grid visual solo abre post, removida la lógica de doble click aquí
         function cardImage(post) { 
             return `<div onclick="openPost('${post.id}')" class="mobile-card relative h-80 lg:h-[500px] overflow-hidden group cursor-pointer tap-effect"><img src="${post.media_url}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onerror="this.src='https://via.placeholder.com/400'"><div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div><div class="absolute bottom-0 p-6"><h3 class="text-3xl font-dancing font-bold text-white leading-tight drop-shadow-lg">${post.titulo}</h3></div></div>`; 
         }
@@ -319,12 +321,18 @@
         <button onclick="toggleSecretMenu()" class="mt-8 text-sub-dynamic hover:text-dynamic underline text-sm">Cerrar</button>
     </div>
 
-    <!-- Navbar -->
+    <!-- Navbar con WhatsApp arriba -->
     <nav class="fixed w-full z-50 top-0 glass-nav h-14 lg:h-20 flex items-center justify-between px-5 transition-colors duration-300">
         <a href="#" onclick="navigateTo('home'); return false;" class="font-dancing text-xl lg:text-3xl font-bold text-dynamic tracking-wider">
             Interesante<span class="text-brand-neon text-3xl">.</span>
         </a>
-        <button id="menu-btn" onclick="toggleMenu()" class="text-xl text-brand-neon tap-effect p-2"><i class="fas fa-bars"></i></button>
+        <div class="flex items-center gap-5">
+            <!-- Icono WhatsApp Arriba -->
+            <a href="https://whatsapp.com/channel/0029Vb784PP2ZjCuME7S3d3m" target="_blank" class="text-2xl text-whatsapp hover:text-whatsappDark hover:scale-110 transition-all">
+                <i class="fab fa-whatsapp"></i>
+            </a>
+            <button id="menu-btn" onclick="toggleMenu()" class="text-xl text-brand-neon tap-effect p-2"><i class="fas fa-bars"></i></button>
+        </div>
     </nav>
 
     <!-- Menú Móvil -->
@@ -336,6 +344,11 @@
         <a href="#" onclick="navigateTo('planeta')" class="text-2xl font-epic text-dynamic hover:text-brand-neon transition-colors">PLANETA</a>
         <a href="#" onclick="navigateTo('humanos')" class="text-2xl font-epic text-dynamic hover:text-brand-neon transition-colors">HUMANOS</a>
         <a href="#" onclick="navigateTo('temporada')" class="text-2xl font-epic text-dynamic hover:text-brand-neon transition-colors">TEMPORADA</a>
+        
+        <!-- Link a WhatsApp en Menú Móvil -->
+        <a href="https://whatsapp.com/channel/0029Vb784PP2ZjCuME7S3d3m" target="_blank" class="mt-8 flex items-center gap-3 px-6 py-3 bg-whatsapp text-white rounded-full font-orbitron text-sm font-bold tracking-widest hover:bg-whatsappDark transition-all">
+            <i class="fab fa-whatsapp text-xl"></i> UNIRSE AL CANAL
+        </a>
     </div>
 
     <!-- VISTA 1: HOME -->
@@ -349,13 +362,28 @@
             
             <div class="relative z-10 text-center px-4 w-full">
                 <p id="seasonal-subtitle" class="text-brand-neon font-orbitron text-[10px] sm:text-sm tracking-[0.3em] font-bold uppercase mb-4 animate-slide-up">
-                    <i class="fas fa-leaf mr-2"></i> ESTÉTICA PURA <i class="fas fa-leaf ml-2"></i>
+                     <!-- Contenido se llena vía JS -->
                 </p>
                 <h1 class="font-orbitron font-black text-2xl sm:text-6xl lg:text-8xl text-white tracking-widest animate-slide-up break-words">INTERESANTE</h1>
                 <div class="w-20 h-1 bg-brand-neon mx-auto my-6 rounded-full animate-slide-up"></div>
-                <button onclick="document.getElementById('videos-home').scrollIntoView({behavior:'smooth'})" class="px-8 py-3 bg-transparent border-2 border-brand-neon text-brand-neon text-xs sm:text-base font-orbitron font-bold rounded-full hover:bg-brand-neon hover:text-black transition-all duration-300 animate-slide-up">
-                    EXPLORAR
-                </button>
+                
+                <!-- NUEVO: Fila Minimalista (WhatsApp - Flecha - Foco) -->
+                <div class="flex items-center justify-center gap-10 mt-8 animate-slide-up">
+                    <!-- WhatsApp -->
+                    <a href="https://whatsapp.com/channel/0029Vb784PP2ZjCuME7S3d3m" target="_blank" class="text-3xl text-whatsapp hover:text-whatsappDark hover:scale-125 transition-all" title="Canal Oficial">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    
+                    <!-- Flecha para bajar (Poco llamativa) -->
+                    <button onclick="document.getElementById('videos-home').scrollIntoView({behavior:'smooth'})" class="text-2xl text-white/40 hover:text-white transition-colors animate-bounce-slow">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    
+                    <!-- Foquito (Toggle Light Mode) -->
+                    <button onclick="toggleLightMode()" class="text-2xl text-yellow-400/80 hover:text-yellow-300 hover:scale-125 transition-all" title="Cambiar Tema">
+                        <i class="fas fa-lightbulb"></i>
+                    </button>
+                </div>
             </div>
         </section>
 
@@ -382,33 +410,74 @@
                 </div>
             </div>
         </section>
+
+        <!-- WhatsApp al final de la categoría -->
+        <div class="w-full flex justify-center py-12 bg-[var(--section-bg)]">
+            <a href="https://whatsapp.com/channel/0029Vb784PP2ZjCuME7S3d3m" target="_blank" class="flex items-center gap-3 text-whatsapp hover:text-whatsappDark font-orbitron text-xs font-bold tracking-[0.2em] border border-whatsapp/30 px-8 py-3 rounded-full hover:bg-whatsapp/10 transition-all group">
+                <i class="fab fa-whatsapp text-lg group-hover:scale-110 transition-transform"></i> CANAL OFICIAL
+            </a>
+        </div>
     </main>
 
-    <!-- VISTAS DE CATEGORÍA UNIFICADAS (GRID VISUAL CORREGIDO) -->
+    <!-- VISTAS DE CATEGORÍA UNIFICADAS -->
     <main id="view-plantillas" class="page-view hidden pt-24 pb-32">
         <div class="px-5 mb-10"><h1 class="text-4xl md:text-6xl font-orbitron font-bold text-brand-neon text-center">PLANTILLAS</h1></div>
         <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VIDEOS</h2><div id="grid-plantillas-videos" class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
         <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VISUAL</h2><div id="grid-plantillas-visual" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
+        
+        <div class="w-full flex justify-center py-12 bg-[var(--section-bg)]">
+            <a href="https://whatsapp.com/channel/0029Vb784PP2ZjCuME7S3d3m" target="_blank" class="flex items-center gap-3 text-whatsapp hover:text-whatsappDark font-orbitron text-xs font-bold tracking-[0.2em] border border-whatsapp/30 px-8 py-3 rounded-full hover:bg-whatsapp/10 transition-all group">
+                <i class="fab fa-whatsapp text-lg group-hover:scale-110 transition-transform"></i> CANAL OFICIAL
+            </a>
+        </div>
     </main>
+
     <main id="view-animales" class="page-view hidden pt-24 pb-32">
         <div class="px-5 mb-10"><h1 class="text-4xl md:text-6xl font-orbitron font-bold text-dynamic text-center">ANIMALES</h1></div>
         <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VIDEOS</h2><div id="grid-animales-videos" class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
         <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VISUAL</h2><div id="grid-animales-visual" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
+        
+        <div class="w-full flex justify-center py-12 bg-[var(--section-bg)]">
+            <a href="https://whatsapp.com/channel/0029Vb784PP2ZjCuME7S3d3m" target="_blank" class="flex items-center gap-3 text-whatsapp hover:text-whatsappDark font-orbitron text-xs font-bold tracking-[0.2em] border border-whatsapp/30 px-8 py-3 rounded-full hover:bg-whatsapp/10 transition-all group">
+                <i class="fab fa-whatsapp text-lg group-hover:scale-110 transition-transform"></i> CANAL OFICIAL
+            </a>
+        </div>
     </main>
+
     <main id="view-planeta" class="page-view hidden pt-24 pb-32">
         <div class="px-5 mb-10"><h1 class="text-4xl md:text-6xl font-orbitron font-bold text-brand-neon text-center">PLANETA</h1></div>
         <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VIDEOS</h2><div id="grid-planeta-videos" class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
         <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VISUAL</h2><div id="grid-planeta-visual" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
+        
+        <div class="w-full flex justify-center py-12 bg-[var(--section-bg)]">
+            <a href="https://whatsapp.com/channel/0029Vb784PP2ZjCuME7S3d3m" target="_blank" class="flex items-center gap-3 text-whatsapp hover:text-whatsappDark font-orbitron text-xs font-bold tracking-[0.2em] border border-whatsapp/30 px-8 py-3 rounded-full hover:bg-whatsapp/10 transition-all group">
+                <i class="fab fa-whatsapp text-lg group-hover:scale-110 transition-transform"></i> CANAL OFICIAL
+            </a>
+        </div>
     </main>
+
     <main id="view-humanos" class="page-view hidden pt-24 pb-32">
         <div class="px-5 mb-10"><h1 class="text-4xl md:text-6xl font-orbitron font-bold text-dynamic text-center">HUMANOS</h1></div>
         <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VIDEOS</h2><div id="grid-humanos-videos" class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
         <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VISUAL</h2><div id="grid-humanos-visual" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
+        
+        <div class="w-full flex justify-center py-12 bg-[var(--section-bg)]">
+            <a href="https://whatsapp.com/channel/0029Vb784PP2ZjCuME7S3d3m" target="_blank" class="flex items-center gap-3 text-whatsapp hover:text-whatsappDark font-orbitron text-xs font-bold tracking-[0.2em] border border-whatsapp/30 px-8 py-3 rounded-full hover:bg-whatsapp/10 transition-all group">
+                <i class="fab fa-whatsapp text-lg group-hover:scale-110 transition-transform"></i> CANAL OFICIAL
+            </a>
+        </div>
     </main>
+
     <main id="view-temporada" class="page-view hidden pt-24 pb-32">
         <div class="px-5 mb-10"><h1 class="text-4xl md:text-6xl font-orbitron font-bold text-brand-neon text-center">TEMPORADA</h1></div>
         <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VIDEOS</h2><div id="grid-temporada-videos" class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
         <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VISUAL</h2><div id="grid-temporada-visual" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
+        
+        <div class="w-full flex justify-center py-12 bg-[var(--section-bg)]">
+            <a href="https://whatsapp.com/channel/0029Vb784PP2ZjCuME7S3d3m" target="_blank" class="flex items-center gap-3 text-whatsapp hover:text-whatsappDark font-orbitron text-xs font-bold tracking-[0.2em] border border-whatsapp/30 px-8 py-3 rounded-full hover:bg-whatsapp/10 transition-all group">
+                <i class="fab fa-whatsapp text-lg group-hover:scale-110 transition-transform"></i> CANAL OFICIAL
+            </a>
+        </div>
     </main>
 
     <!-- FOOTER FINAL -->
@@ -501,11 +570,13 @@
             const month = monthIndex !== null ? monthIndex : date.getMonth();
             const theme = themes[month];
             
+            // Detección automática al cargar o manual
             const isLight = document.body.classList.contains('light-mode');
             document.body.className = `antialiased selection:bg-brand-neon selection:text-black transition-colors duration-300 ${theme.class} ${isLight ? 'light-mode' : ''}`;
             
             const sub = document.getElementById('seasonal-subtitle');
-            if(sub) sub.innerHTML = `<i class="fas ${theme.icon} mr-2"></i> ${theme.sub} <i class="fas ${theme.icon} ml-2"></i>`;
+            // MODIFICADO: Iconos ocultos en móvil (hidden) y visibles en PC (lg:inline)
+            if(sub) sub.innerHTML = `<i class="fas ${theme.icon} mr-2 hidden lg:inline"></i> NO ES MAGIA NI CREENCIAS SIMPLEMENTE <i class="fas ${theme.icon} ml-2 hidden lg:inline"></i>`;
 
             // Cambiar imagen de fondo con transición
             const heroImg = document.getElementById('hero-image');
@@ -546,6 +617,25 @@
             document.body.appendChild(alertBox);
             setTimeout(() => alertBox.remove(), 3000);
         }
+
+        // DETECCION AUTOMATICA DE TEMA DEL SISTEMA
+        // 1. Aplicar al inicio
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+            document.body.classList.add('light-mode');
+        }
+        
+        // 2. Escuchar cambios en vivo
+        window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', event => {
+            if (event.matches) {
+                document.body.classList.add('light-mode');
+            } else {
+                document.body.classList.remove('light-mode');
+            }
+            // Reaplicar tema para ajustar colores/imágenes
+            const currentClass = document.body.className.match(/theme-[a-z]{3}/)[0];
+            const monthKey = Object.keys(themes).find(key => themes[key].class === currentClass);
+            applySeasonalTheme(parseInt(monthKey));
+        });
 
         applySeasonalTheme();
 
@@ -661,4 +751,3 @@
     </script>
 </body>
 </html>
-
