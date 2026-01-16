@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>Interesante - Fondos Dinámicos</title>
+    <meta name="google-site-verification" content="DFFLETOq66cmRMIfqfL24qVJBaGFqLbudO0qzB-exDk" />
+    <title>Interesante - Elegancia</title>
     <meta name="theme-color" content="#000000">
     
     <!-- Tailwind CSS & FontAwesome -->
@@ -45,6 +46,7 @@
 
     <style>
         :root {
+            /* COLORES MODO OSCURO (Neón / Vibrante) */
             --brand-color: #39ff14;
             --bg-base: #0a0a0a;
             --bg-overlay: rgba(10, 10, 10, 0.95);
@@ -58,20 +60,34 @@
 
         /* --- MODO CLARO (Light Mode) --- */
         body.light-mode {
-            --bg-base: #f5f5f5;
+            --bg-base: #f8fafc; /* Gris azulado muy suave, más elegante que blanco puro */
             --bg-overlay: rgba(255, 255, 255, 0.98);
-            --section-bg: #f5f5f5;
-            --text-main: #111827;
-            --text-sub: #52525b;
+            --section-bg: #f8fafc;
+            --text-main: #0f172a; /* Azul noche muy oscuro */
+            --text-sub: #475569; /* Gris pizarra */
             --card-bg: #ffffff;
-            --card-border: #e4e4e7;
-            --nav-bg: rgba(255, 255, 255, 0.98);
+            --card-border: #cbd5e1;
+            --nav-bg: rgba(255, 255, 255, 0.95);
         }
+
+        /* PALETA ELEGANTE PARA MODO CLARO (Sobreescribe los neones) */
+        body.light-mode.theme-jan { --brand-color: #059669; } /* Esmeralda Profundo */
+        body.light-mode.theme-feb { --brand-color: #be185d; } /* Rosa Frambuesa */
+        body.light-mode.theme-mar { --brand-color: #0d9488; } /* Verde Azulado (Teal) */
+        body.light-mode.theme-apr { --brand-color: #15803d; } /* Verde Bosque */
+        body.light-mode.theme-may { --brand-color: #7e22ce; } /* Violeta Real */
+        body.light-mode.theme-jun { --brand-color: #b45309; } /* Ámbar/Ocre */
+        body.light-mode.theme-jul { --brand-color: #166534; } /* Verde Selva Oscuro */
+        body.light-mode.theme-aug { --brand-color: #0891b2; } /* Cian Oceánico */
+        body.light-mode.theme-sep { --brand-color: #c2410c; } /* Terracota */
+        body.light-mode.theme-oct { --brand-color: #6b21a8; } /* Púrpura Místico */
+        body.light-mode.theme-nov { --brand-color: #0369a1; } /* Azul Acero */
+        body.light-mode.theme-dec { --brand-color: #1d4ed8; } /* Azul Zafiro */
 
         .text-dynamic { color: var(--text-main); }
         .text-sub-dynamic { color: var(--text-sub); }
         
-        body.light-mode .text-white { color: #111827 !important; } 
+        body.light-mode .text-white { color: #0f172a !important; } 
         body.light-mode .text-gray-300, body.light-mode .text-gray-400, body.light-mode .text-gray-500 { color: var(--text-sub) !important; }
         
         .glass-nav { 
@@ -87,7 +103,7 @@
         #bottom-dock { 
             background: var(--nav-bg); 
             border: 1px solid var(--card-border); 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08); /* Sombra más suave */
         }
 
         .mobile-card { 
@@ -98,27 +114,57 @@
         }
         
         body:not(.light-mode) .mobile-card:hover { border-color: var(--brand-color); transform: translateY(-3px); }
-        body.light-mode .mobile-card:hover { border-color: var(--brand-color); box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.05); transform: translateY(-3px); }
+        body.light-mode .mobile-card:hover { 
+            border-color: var(--brand-color); 
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08); /* Sombra elegante */
+            transform: translateY(-3px); 
+        }
         
         body.light-mode .mobile-card .aspect-video { background-color: #000 !important; }
         body.light-mode .bg-black:not(.aspect-video), body.light-mode .bg-\[\#151515\] { background-color: var(--card-bg) !important; }
-        body.light-mode .bg-\[\#1a1a1a\] { background-color: #fafafa !important; border: 1px solid #e4e4e7; } 
+        body.light-mode .bg-\[\#1a1a1a\] { background-color: #f1f5f9 !important; border: 1px solid #e2e8f0; } 
 
         #info-modal, #mobile-menu-overlay, #secret-menu { background-color: var(--bg-overlay); }
         body.light-mode #mobile-menu-overlay .text-white, body.light-mode #secret-menu { color: var(--text-main) !important; }
         #secret-menu { border: 1px solid var(--card-border); }
-        body.light-mode #secret-menu button { background: #f4f4f5; color: var(--text-main); border: 1px solid #d4d4d8; }
+        body.light-mode #secret-menu button { background: #f1f5f9; color: var(--text-main); border: 1px solid #cbd5e1; }
         body.light-mode #secret-menu button:hover { background: var(--brand-color); color: white; border-color: var(--brand-color); }
 
-        .category-chip { border: 1px solid var(--card-border); color: var(--text-sub); background: transparent; }
-        .category-chip:hover { border-color: var(--brand-color) !important; color: var(--brand-color) !important; background: transparent; }
-        body.light-mode .category-chip:hover { background: var(--brand-color) !important; color: white !important; }
+        /* Chips de Categoría - Elegancia */
+        .category-chip { 
+            border: 1px solid var(--card-border);
+            color: var(--text-sub); 
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+        
+        body:not(.light-mode) .category-chip:hover { 
+            border-color: var(--brand-color); 
+            color: var(--brand-color);
+            background: rgba(255,255,255,0.05);
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+
+        body.light-mode .category-chip {
+            border-color: #cbd5e1;
+            color: #64748b;
+            background: #ffffff;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        body.light-mode .category-chip:hover {
+            border-color: var(--brand-color) !important;
+            color: var(--brand-color) !important;
+            background: #ffffff !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
 
         body.light-mode .bg-\[\#111\] { background-color: var(--card-bg) !important; border: 1px solid var(--card-border) !important; }
         body.light-mode #modal-body { color: var(--text-sub) !important; }
         body.light-mode .border-brand-neon\/30 { border-color: var(--card-border) !important; }
 
-        /* Estilos Estacionales */
+        /* Estilos Estacionales por defecto (Modo Oscuro) */
         body.theme-jan { --brand-color: #39ff14; }
         body.theme-feb { --brand-color: #ff0080; }
         body.theme-mar { --brand-color: #00ff9d; }
@@ -133,8 +179,11 @@
         body.theme-dec { --brand-color: #00dfff; }
 
         body { background-color: var(--bg-base); color: var(--text-main); transition: background-color 0.3s ease, color 0.3s ease; overflow-x: hidden; }
-        #bottom-dock { transition: transform 0.3s ease; z-index: 9999; }
+        
+        /* DOCK FIXED */
+        #bottom-dock { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 9999; }
         #bottom-dock.hidden-dock { transform: translate(-50%, 200%); }
+
         .epic-section { position: relative; background: var(--section-bg); padding-top: 2rem; padding-bottom: 2rem; }
         .play-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); }
         .play-icon { width: 50px; height: 50px; background: var(--brand-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
@@ -144,8 +193,9 @@
         .loading-spinner { col-span-full: 1; text-align: center; padding: 3rem 0; width: 100%; grid-column: 1 / -1; }
         .tap-effect:active { transform: scale(0.98); }
         
-        /* Transición de imagen de fondo */
         #hero-image { transition: opacity 0.5s ease-in-out; }
+        body.light-mode #hero-image { filter: grayscale(0) !important; opacity: 1 !important; }
+        body.light-mode #hero-overlay { background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.2), var(--bg-base)) !important; }
     </style>
 </head>
 <body class="antialiased selection:bg-brand-neon selection:text-black transition-colors duration-300">
@@ -268,7 +318,7 @@
             <div class="absolute inset-0 z-0">
                 <!-- IMAGEN HERO DINÁMICA -->
                 <img id="hero-image" src="" class="w-full h-full object-cover opacity-50 animate-ken-burns grayscale hover:grayscale-0 transition-all duration-[2s]">
-                <div class="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-var(--bg-base)"></div>
+                <div id="hero-overlay" class="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-[var(--bg-base)]"></div>
             </div>
             
             <div class="relative z-10 text-center px-4 w-full">
@@ -308,31 +358,31 @@
         </section>
     </main>
 
-    <!-- VISTAS DE CATEGORÍA UNIFICADAS -->
+    <!-- VISTAS DE CATEGORÍA UNIFICADAS (GRID VISUAL CORREGIDO) -->
     <main id="view-plantillas" class="page-view hidden pt-24 pb-32">
         <div class="px-5 mb-10"><h1 class="text-4xl md:text-6xl font-orbitron font-bold text-brand-neon text-center">PLANTILLAS</h1></div>
         <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VIDEOS</h2><div id="grid-plantillas-videos" class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
-        <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VISUAL</h2><div id="grid-plantillas-visual" class="grid grid-cols-2 md:grid-cols-4 gap-4"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
+        <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VISUAL</h2><div id="grid-plantillas-visual" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
     </main>
     <main id="view-animales" class="page-view hidden pt-24 pb-32">
         <div class="px-5 mb-10"><h1 class="text-4xl md:text-6xl font-orbitron font-bold text-dynamic text-center">ANIMALES</h1></div>
         <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VIDEOS</h2><div id="grid-animales-videos" class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
-        <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VISUAL</h2><div id="grid-animales-visual" class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
+        <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VISUAL</h2><div id="grid-animales-visual" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
     </main>
     <main id="view-planeta" class="page-view hidden pt-24 pb-32">
         <div class="px-5 mb-10"><h1 class="text-4xl md:text-6xl font-orbitron font-bold text-brand-neon text-center">PLANETA</h1></div>
         <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VIDEOS</h2><div id="grid-planeta-videos" class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
-        <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VISUAL</h2><div id="grid-planeta-visual" class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
+        <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VISUAL</h2><div id="grid-planeta-visual" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
     </main>
     <main id="view-humanos" class="page-view hidden pt-24 pb-32">
         <div class="px-5 mb-10"><h1 class="text-4xl md:text-6xl font-orbitron font-bold text-dynamic text-center">HUMANOS</h1></div>
         <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VIDEOS</h2><div id="grid-humanos-videos" class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
-        <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VISUAL</h2><div id="grid-humanos-visual" class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
+        <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VISUAL</h2><div id="grid-humanos-visual" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
     </main>
     <main id="view-temporada" class="page-view hidden pt-24 pb-32">
         <div class="px-5 mb-10"><h1 class="text-4xl md:text-6xl font-orbitron font-bold text-brand-neon text-center">TEMPORADA</h1></div>
         <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VIDEOS</h2><div id="grid-temporada-videos" class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
-        <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VISUAL</h2><div id="grid-temporada-visual" class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
+        <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4">VISUAL</h2><div id="grid-temporada-visual" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
     </main>
 
     <!-- FOOTER FINAL -->
@@ -420,7 +470,15 @@
                     heroImg.style.opacity = '0';
                     setTimeout(() => {
                         heroImg.src = theme.bg;
-                        heroImg.onload = () => { heroImg.style.opacity = '0.5'; }; // Restaurar opacidad al cargar
+                        heroImg.onload = () => { 
+                            // Restaurar opacidad al cargar
+                            // En modo claro será 1, en oscuro 0.5 por defecto
+                            if (document.body.classList.contains('light-mode')) {
+                                heroImg.style.opacity = '1';
+                            } else {
+                                heroImg.style.opacity = '0.5';
+                            }
+                        }; 
                     }, 500);
                 }
             }
@@ -505,14 +563,8 @@
             }
         }
 
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            const dock = document.getElementById('bottom-dock');
-            if (!dock) return;
-            if (currentScroll > lastScroll && currentScroll > 50) dock.classList.add('hidden-dock');
-            else dock.classList.remove('hidden-dock');
-            lastScroll = currentScroll <= 0 ? 0 : currentScroll; 
-        });
+        // SCROLL LISTENER REMOVIDO para que el dock sea FIJO.
+        // window.addEventListener('scroll', () => { ... }); 
 
         window.toggleMenu = function() {
             const menu = document.getElementById('mobile-menu-overlay');
@@ -549,12 +601,18 @@
             
             document.getElementById('info-modal').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
+            
+            // OCULTAR DOCK AL ABRIR POST
+            document.getElementById('bottom-dock').classList.add('hidden-dock');
         }
 
         window.closeModal = function() {
             document.getElementById('info-modal').classList.add('hidden');
             document.getElementById('modal-media-wrapper').innerHTML = '';
             document.body.style.overflow = '';
+            
+            // MOSTRAR DOCK AL CERRAR POST
+            document.getElementById('bottom-dock').classList.remove('hidden-dock');
         }
     </script>
 </body>
