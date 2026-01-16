@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="google-site-verification" content="mb2MRjqXYRTiPUGGGk26wfmLH_i9uvn36IegkB04GXw" />
-    <title>Interesante</title>
-<link rel="icon" type="Imagenes/png" href="Imagenes/Sabias.png">
+    <title>Interesante - Elegancia</title>
+    <link rel="icon" type="Imagenes/png" href="Imagenes/Sabias.png">
     <meta name="theme-color" content="#000000">
     
     <!-- Tailwind CSS & FontAwesome -->
@@ -356,8 +356,9 @@
     <main id="view-home" class="page-view pb-32 pt-14 lg:pt-20">
         <section class="relative h-[85vh] flex flex-col items-center justify-center overflow-hidden bg-black">
             <div class="absolute inset-0 z-0">
-                <!-- IMAGEN HERO DINÁMICA (Sin Zoom) -->
-                <img id="hero-image" src="" class="w-full h-full object-cover opacity-50 grayscale hover:grayscale-0 transition-all duration-[2s]">
+                <!-- IMAGEN HERO DINÁMICA (ACTUALIZADA: Color original en ambos modos) -->
+                <!-- Eliminado 'grayscale' y 'opacity-50' del estado base, ajustado a opacidad 60 para contraste -->
+                <img id="hero-image" src="" class="w-full h-full object-cover opacity-60 hover:opacity-100 transition-all duration-[2s]">
                 <div id="hero-overlay" class="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-[var(--bg-base)]"></div>
             </div>
             
@@ -368,7 +369,7 @@
                 <h1 class="font-orbitron font-black text-2xl sm:text-6xl lg:text-8xl text-white tracking-widest animate-slide-up break-words">INTERESANTE</h1>
                 <div class="w-20 h-1 bg-brand-neon mx-auto my-6 rounded-full animate-slide-up"></div>
                 
-                <!-- NUEVO: Fila Minimalista (WhatsApp - Flecha - Foco) -->
+                <!-- NUEVO: Fila Minimalista (WhatsApp - Flecha - Foco/Sol) -->
                 <div class="flex items-center justify-center gap-10 mt-8 animate-slide-up">
                     <!-- WhatsApp -->
                     <a href="https://whatsapp.com/channel/0029Vb784PP2ZjCuME7S3d3m" target="_blank" class="text-3xl text-whatsapp hover:text-whatsappDark hover:scale-125 transition-all" title="Canal Oficial">
@@ -380,9 +381,9 @@
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     
-                    <!-- Foquito (Toggle Light Mode) -->
+                    <!-- Sol (Toggle Light Mode) -->
                     <button onclick="toggleLightMode()" class="text-2xl text-yellow-400/80 hover:text-yellow-300 hover:scale-125 transition-all" title="Cambiar Tema">
-                        <i class="fas fa-lightbulb"></i>
+                        <i class="fas fa-sun"></i>
                     </button>
                 </div>
             </div>
@@ -588,11 +589,11 @@
                         heroImg.src = theme.bg;
                         heroImg.onload = () => { 
                             // Restaurar opacidad al cargar
-                            // En modo claro será 1, en oscuro 0.5 por defecto
+                            // En modo claro será 1, en oscuro 0.5 (ahora 0.6) por defecto
                             if (document.body.classList.contains('light-mode')) {
                                 heroImg.style.opacity = '1';
                             } else {
-                                heroImg.style.opacity = '0.5';
+                                heroImg.style.opacity = '0.6';
                             }
                         }; 
                     }, 500);
@@ -606,6 +607,11 @@
 
         function toggleLightMode() {
             document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            
+            // GUARDAR PREFERENCIA
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+
             const currentClass = document.body.className.match(/theme-[a-z]{3}/)[0];
             const monthKey = Object.keys(themes).find(key => themes[key].class === currentClass);
             applySeasonalTheme(parseInt(monthKey));
@@ -619,23 +625,34 @@
             setTimeout(() => alertBox.remove(), 3000);
         }
 
-        // DETECCION AUTOMATICA DE TEMA DEL SISTEMA
-        // 1. Aplicar al inicio
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+        // DETECCION AUTOMATICA DE TEMA (Con Persistencia)
+        // 1. Revisar LocalStorage
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
             document.body.classList.add('light-mode');
+        } else if (savedTheme === 'dark') {
+            document.body.classList.remove('light-mode');
+        } else {
+            // 2. Si no hay guardado, usar sistema
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+                document.body.classList.add('light-mode');
+            }
         }
         
-        // 2. Escuchar cambios en vivo
+        // 3. Escuchar cambios en vivo del sistema (solo si no se ha forzado manualmente, opcionalmente)
         window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', event => {
-            if (event.matches) {
-                document.body.classList.add('light-mode');
-            } else {
-                document.body.classList.remove('light-mode');
+            // Solo cambiar automáticamente si el usuario no ha establecido una preferencia manual explicita, o sobreescribir.
+            // En este caso, respetamos la preferencia manual si existe, si no, seguimos al sistema.
+            if (!localStorage.getItem('theme')) {
+                if (event.matches) {
+                    document.body.classList.add('light-mode');
+                } else {
+                    document.body.classList.remove('light-mode');
+                }
+                const currentClass = document.body.className.match(/theme-[a-z]{3}/)[0];
+                const monthKey = Object.keys(themes).find(key => themes[key].class === currentClass);
+                applySeasonalTheme(parseInt(monthKey));
             }
-            // Reaplicar tema para ajustar colores/imágenes
-            const currentClass = document.body.className.match(/theme-[a-z]{3}/)[0];
-            const monthKey = Object.keys(themes).find(key => themes[key].class === currentClass);
-            applySeasonalTheme(parseInt(monthKey));
         });
 
         applySeasonalTheme();
