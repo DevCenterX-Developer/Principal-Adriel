@@ -1,784 +1,750 @@
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <meta name="google-site-verification" content="mb2MRjqXYRTiPUGGGk26wfmLH_i9uvn36IegkB04GXw" />
-    <title>Interesante</title>
-    <link rel="icon" type="Imagenes/png" href="Imagenes/Sabias.png">
-    <meta name="theme-color" content="#000000">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin - Publicar & Gestionar</title>
     
-    <!-- Tailwind CSS & FontAwesome -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Orbitron:wght@500;700;900&family=Outfit:wght@300;400;600;800&family=Syncopate:wght@700&family=Creepster&family=Berkshire+Swash&display=swap" rel="stylesheet">
+    <!-- FontAwesome 6.4 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'dancing': ['"Dancing Script"', 'cursive'],
-                        'orbitron': ['"Orbitron"', 'sans-serif'],
-                        'sans': ['"Outfit"', 'sans-serif'],
-                        'epic': ['"Syncopate"', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: { neon: 'var(--brand-color)' },
-                        whatsapp: '#25D366',
-                        whatsappDark: '#128C7E',
-                    },
-                    animation: {
-                        'slide-up': 'slideUp 0.8s ease-out forwards',
-                        'pulse-slow': 'pulse 4s infinite',
-                        'fade-in-slow': 'fadeIn 1s ease-in-out',
-                        'bounce-slow': 'bounce 2s infinite',
-                    },
-                    keyframes: {
-                        slideUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
-                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } }
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@800&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
 
     <style>
-        :root {
-            /* COLORES MODO OSCURO (Neón / Vibrante) */
-            --brand-color: #39ff14;
-            --text-main: #ffffff;
-            --text-sub: #a3a3a3;
-            --card-bg: rgba(21, 21, 21, 0.8); /* Más traslúcido para ver el fondo */
-            --card-border: #262626;
-            --nav-bg: rgba(15, 15, 15, 0.85);
-            /* Overlay del fondo para modo oscuro: Muy sutil (0.4) para que la imagen resalte */
-            --bg-overlay-color: rgba(0, 0, 0, 0.4); 
+        body { background: #020202; color: #fff; font-family: 'Outfit', sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        /* Scrollbar Global */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; border: 2px solid #050505; }
+        ::-webkit-scrollbar-thumb:hover { background: #39ff14; }
+
+        @media (min-width: 1024px) {
+            .thin-scroll::-webkit-scrollbar { width: 4px; }
+            .thin-scroll::-webkit-scrollbar-track { background: transparent; }
+            .thin-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+            .thin-scroll::-webkit-scrollbar-thumb:hover { background: #39ff14; }
         }
 
-        /* --- MODO CLARO (Light Mode) --- */
-        body.light-mode {
-            --text-main: #0f172a; /* Azul noche muy oscuro */
-            --text-sub: #1e293b; /* Gris oscuro para mejor contraste */
-            --card-bg: rgba(255, 255, 255, 0.85);
-            --card-border: #cbd5e1;
-            --nav-bg: rgba(255, 255, 255, 0.85);
-            /* Overlay del fondo para modo claro: Muy sutil (0.2) para ver colores originales */
-            --bg-overlay-color: rgba(255, 255, 255, 0.2);
-        }
-
-        /* PALETA ELEGANTE PARA MODO CLARO (Sobreescribe los neones) */
-        body.light-mode.theme-jan { --brand-color: #059669; }
-        body.light-mode.theme-feb { --brand-color: #be185d; }
-        body.light-mode.theme-mar { --brand-color: #0d9488; }
-        body.light-mode.theme-apr { --brand-color: #15803d; }
-        body.light-mode.theme-may { --brand-color: #7e22ce; }
-        body.light-mode.theme-jun { --brand-color: #b45309; }
-        body.light-mode.theme-jul { --brand-color: #166534; }
-        body.light-mode.theme-aug { --brand-color: #0891b2; }
-        body.light-mode.theme-sep { --brand-color: #c2410c; }
-        body.light-mode.theme-oct { --brand-color: #6b21a8; }
-        body.light-mode.theme-nov { --brand-color: #0369a1; }
-        body.light-mode.theme-dec { --brand-color: #1d4ed8; }
-
-        .text-dynamic { color: var(--text-main); }
-        .text-sub-dynamic { color: var(--text-sub); }
-        
-        body.light-mode .text-white { color: #0f172a !important; } 
-        body.light-mode .text-gray-300, body.light-mode .text-gray-400, body.light-mode .text-gray-500 { color: var(--text-sub) !important; }
-        
-        .glass-nav { 
-            background: var(--nav-bg); 
-            border-bottom: 1px solid var(--card-border); 
+        .neon-card { 
+            border: 1px solid rgba(57, 255, 20, 0.1); 
+            box-shadow: 0 0 30px -10px rgba(57, 255, 20, 0.05); 
             backdrop-filter: blur(10px);
+            background: rgba(5, 5, 5, 0.95);
         }
         
-        footer { 
-            background: transparent; 
-            border-top: 1px solid var(--card-border); 
-            position: relative;
-            z-index: 10;
+        .font-epic { font-family: 'Orbitron', sans-serif; letter-spacing: 2px; }
+        
+        input, select, textarea { 
+            background: #080808 !important; 
+            border: 1px solid #1a1a1a !important; 
+            color: white !important; 
+            transition: all 0.3s ease; 
+        }
+        input:focus, select:focus, textarea:focus { 
+            border-color: #39ff14 !important; 
+            background: #0a0a0a !important; 
+            box-shadow: 0 0 15px -5px rgba(57, 255, 20, 0.1);
         }
         
-        #bottom-dock { 
-            background: var(--nav-bg); 
-            border: 1px solid var(--card-border); 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2); 
-            backdrop-filter: blur(10px);
-        }
-
-        .mobile-card { 
-            border-radius: 1rem; 
-            border: 1px solid var(--card-border); 
-            background: var(--card-bg); 
-            backdrop-filter: blur(10px); /* Efecto vidrio para mejorar lectura */
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
+        .btn-upload { background: #0a0a0a; border: 1px solid #1a1a1a; }
+        textarea { overflow: hidden; min-height: 40px; }
         
-        body:not(.light-mode) .mobile-card:hover { border-color: var(--brand-color); transform: translateY(-3px); }
-        body.light-mode .mobile-card:hover { 
-            border-color: var(--brand-color); 
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08); 
-            transform: translateY(-3px); 
+        /* Animaciones */
+        @keyframes pulse-green {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
         }
-        
-        body.light-mode .mobile-card .aspect-video { background-color: #000 !important; }
-        body.light-mode .bg-black:not(.aspect-video), body.light-mode .bg-\[\#151515\] { background-color: var(--card-bg) !important; }
-        body.light-mode .bg-\[\#1a1a1a\] { background-color: #f1f5f9 !important; border: 1px solid #e2e8f0; } 
+        .animate-pulse-green { animation: pulse-green 2s infinite; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(100%); }
 
-        #info-modal, #mobile-menu-overlay, #secret-menu { background-color: var(--bg-overlay-color); backdrop-filter: blur(20px); }
-        body.light-mode #mobile-menu-overlay .text-white, body.light-mode #secret-menu { color: var(--text-main) !important; }
-        #secret-menu { border: 1px solid var(--card-border); }
-        body.light-mode #secret-menu button { background: #f1f5f9; color: var(--text-main); border: 1px solid #cbd5e1; }
-        body.light-mode #secret-menu button:hover { background: var(--brand-color); color: white; border-color: var(--brand-color); }
-
-        /* Chips de Categoría */
-        .category-chip { 
-            border: 1px solid var(--card-border);
-            color: var(--text-sub); 
-            background: var(--card-bg); 
-            backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
-        }
-        
-        body:not(.light-mode) .category-chip:hover { 
-            border-color: var(--brand-color); 
-            color: var(--brand-color);
-            background: rgba(255,255,255,0.05);
-            box-shadow: 0 0 10px rgba(0,0,0,0.3);
-        }
-
-        body.light-mode .category-chip {
-            border-color: #cbd5e1;
-            color: #475569;
-            background: rgba(255,255,255,0.9);
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        }
-
-        body.light-mode .category-chip:hover {
-            border-color: var(--brand-color) !important;
-            color: var(--brand-color) !important;
-            background: #ffffff !important;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            transform: translateY(-2px);
-        }
-
-        body.light-mode .bg-\[\#111\] { background-color: var(--card-bg) !important; border: 1px solid var(--card-border) !important; }
-        body.light-mode #modal-body { color: var(--text-sub) !important; }
-        body.light-mode .border-brand-neon\/30 { border-color: var(--card-border) !important; }
-
-        /* Estilos Estacionales */
-        body.theme-jan { --brand-color: #39ff14; }
-        body.theme-feb { --brand-color: #ff0080; }
-        body.theme-mar { --brand-color: #00ff9d; }
-        body.theme-apr { --brand-color: #50c878; }
-        body.theme-may { --brand-color: #b87aff; }
-        body.theme-jun { --brand-color: #ffd700; }
-        body.theme-jul { --brand-color: #00b300; }
-        body.theme-aug { --brand-color: #00fa9a; }
-        body.theme-sep { --brand-color: #ff5e00; }
-        body.theme-oct { --brand-color: #9d00ff; }
-        body.theme-nov { --brand-color: #98fb98; }
-        body.theme-dec { --brand-color: #00dfff; }
-
-        body { 
-            background-color: transparent; 
-            color: var(--text-main); 
-            transition: color 0.3s ease; 
-            overflow-x: hidden; 
-        }
-        
-        /* DOCK FIXED */
-        #bottom-dock { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 9999; }
-        #bottom-dock.hidden-dock { transform: translate(-50%, 200%); }
-
-        .epic-section { 
-            position: relative; 
-            background: transparent; 
-            padding-top: 2rem; 
-            padding-bottom: 2rem; 
-        }
-        
-        .play-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); }
-        .play-icon { width: 50px; height: 50px; background: var(--brand-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--brand-color); border-radius: 3px; }
-        .loading-spinner { col-span-full: 1; text-align: center; padding: 3rem 0; width: 100%; grid-column: 1 / -1; }
-        .tap-effect:active { transform: scale(0.98); }
-        
-        /* Fondo Global */
-        #global-bg-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        #global-bg-image { 
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: opacity 0.5s ease-in-out;
-            /* Modo Oscuro: Opacidad alta para ver color (0.9), casi sin alteración */
-            opacity: 0.9; 
-        }
-
-        #global-bg-overlay {
-            position: absolute;
-            inset: 0;
-            background-color: var(--bg-overlay-color);
-            transition: background-color 0.3s ease;
-        }
-
-        /* En modo light, imagen 100% visible con contraste mejorado */
-        body.light-mode #global-bg-image {
-            filter: contrast(1.1) saturate(1.1); /* Ligero boost de color */
-            opacity: 1 !important; 
-        }
-        
-        /* Sombra de texto forzada para legibilidad sobre imágenes vivas */
-        h1, h2, h3, p, .text-dynamic, i { 
-            text-shadow: 0 2px 4px rgba(0,0,0,0.6); 
-        }
-        
-        body.light-mode h1, body.light-mode h2, body.light-mode h3, body.light-mode p, body.light-mode .text-dynamic, body.light-mode i { 
-            text-shadow: 0 2px 15px rgba(255,255,255,0.8), 0 0 5px rgba(255,255,255,0.5); 
-        }
-
-        .cursor-zoom-in { cursor: zoom-in; }
+        .post-item { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .post-item:hover { transform: translateY(-3px); border-color: rgba(57,255,20,0.4); box-shadow: 0 10px 30px -5px rgba(57,255,20,0.1); }
+        .modal-backdrop { background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(10px); }
     </style>
 </head>
-<body class="antialiased selection:bg-brand-neon selection:text-black transition-colors duration-300">
+<body class="min-h-screen p-4 md:p-6 lg:p-8 overflow-x-hidden selection:bg-[#39ff14] selection:text-black">
 
-    <!-- FONDO GLOBAL (Estilo WhatsApp) -->
-    <div id="global-bg-container">
-        <img id="global-bg-image" src="" alt="Fondo Estacional">
-        <div id="global-bg-overlay"></div>
+    <!-- MODAL DE VISTA PREVIA -->
+    <div id="media-modal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4" onclick="cerrarModalMedia()">
+        <div class="relative w-full max-w-6xl max-h-[90vh] flex flex-col items-center justify-center" onclick="event.stopPropagation()">
+            <button onclick="cerrarModalMedia()" class="absolute -top-12 right-0 text-white hover:text-[#39ff14] text-sm font-bold uppercase tracking-widest flex items-center gap-2 transition-colors bg-black/50 px-4 py-2 rounded-full border border-white/10 shadow-lg z-50">
+                Cerrar <i class="fas fa-times text-lg"></i>
+            </button>
+            <div id="modal-content" class="w-full h-full flex items-center justify-center rounded-2xl overflow-hidden shadow-[0_0_100px_rgba(57,255,20,0.15)] border border-[#39ff14]/30 bg-black relative">
+                <!-- Contenido dinámico -->
+            </div>
+        </div>
     </div>
 
-    <!-- LÓGICA DE CARGA -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, getDocs, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-
-        const firebaseConfig = { apiKey: "AIzaSyBF2GoCkpWo_gnggZjcSRjb062CPhUUEto", authDomain: "devcenter-15.firebaseapp.com", projectId: "devcenter-15", storageBucket: "devcenter-15.firebasestorage.app", messagingSenderId: "354151968683", appId: "1:354151968683:web:ffb17232a6843224f2ecee" };
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-
-        window.allPosts = {}; 
-
-        async function loadContent() {
-            try {
-                try { await signInAnonymously(auth); } catch(e) {}
-                const q = query(collection(db, 'productos'));
-                const snapshot = await getDocs(q);
-                let posts = [];
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    data.id = doc.id;
-                    data.categoria = (data.categoria || 'principal').toLowerCase().trim();
-                    if (!data.tipo) data.tipo = (data.media_url && (data.media_url.includes('.mp4') || data.media_url.includes('/video/'))) ? 'video' : 'image';
-                    posts.push(data);
-                });
-                renderPosts(posts);
-            } catch (e) {
-                console.error("Error:", e);
-                document.querySelectorAll('.loading-spinner').forEach(el => el.innerHTML = "Error de conexión");
-            }
-        }
-
-        function renderPosts(posts) {
-            const containers = {
-                'home': { video: 'grid-home-videos', visual: 'grid-home-visual' },
-                'plantillas': { video: 'grid-plantillas-videos', visual: 'grid-plantillas-visual' },
-                'animales': { video: 'grid-animales-videos', visual: 'grid-animales-visual' },
-                'planeta': { video: 'grid-planeta-videos', visual: 'grid-planeta-visual' },
-                'humanos': { video: 'grid-humanos-videos', visual: 'grid-humanos-visual' },
-                'temporada': { video: 'grid-temporada-videos', visual: 'grid-temporada-visual' }
-            };
-
-            Object.values(containers).forEach(c => {
-                const v = document.getElementById(c.video);
-                const i = document.getElementById(c.visual);
-                if(v) v.innerHTML = '';
-                if(i) i.innerHTML = '';
-            });
-
-            posts.forEach(post => {
-                window.allPosts[post.id] = post;
-                let catKey = post.categoria;
-                if(catKey === 'principal') catKey = 'home';
+    <!-- LAYOUT PRINCIPAL -->
+    <main class="max-w-[1920px] mx-auto flex flex-col lg:flex-row gap-8 items-start relative pb-20 lg:pb-0">
+        
+        <!-- COLUMNA IZQUIERDA: FORMULARIO -->
+        <section class="w-full lg:w-[380px] xl:w-[450px] flex-shrink-0 lg:sticky lg:top-8 z-20 self-start">
+            <div class="bg-[#050505] p-5 xl:p-6 rounded-[1.5rem] neon-card relative overflow-hidden flex flex-col lg:max-h-[calc(100vh-4rem)]">
                 
-                if (containers[catKey]) {
-                    const containerId = post.tipo === 'video' ? containers[catKey].video : containers[catKey].visual;
-                    const containerEl = document.getElementById(containerId);
+                <!-- Header Fijo -->
+                <div class="text-center mb-4 relative z-10 flex-shrink-0">
+                    <h1 class="font-epic text-lg xl:text-xl text-[#39ff14] drop-shadow-[0_0_5px_rgba(57,255,20,0.5)] flex items-center justify-center gap-2" id="form-title">
+                        <i class="fas fa-pen-to-square"></i> NUEVO POST
+                    </h1>
+                    <div class="h-0.5 w-12 bg-[#39ff14] mx-auto mt-2 rounded-full opacity-50 shadow-[0_0_10px_#39ff14]"></div>
+                </div>
+                
+                <div id="mensaje" class="hidden flex-shrink-0"></div>
+
+                <!-- Contenedor del Formulario -->
+                <div class="lg:overflow-y-auto thin-scroll lg:pr-1 lg:-mr-1 space-y-4 pb-2">
+                    <!-- Título -->
+                    <div>
+                        <label class="text-[10px] text-gray-500 uppercase font-bold ml-1 mb-1 block flex items-center gap-1.5">
+                            <i class="fas fa-signature text-[#39ff14]"></i> Título
+                        </label>
+                        <input type="text" id="titulo" placeholder="Título impactante..." class="w-full p-3 xl:p-4 rounded-xl text-sm outline-none shadow-inner font-medium focus:scale-[1.01] transition-transform">
+                    </div>
+
+                    <!-- Entrada -->
+                    <div>
+                        <label class="text-[10px] text-gray-500 uppercase font-bold ml-1 mb-1 block flex items-center gap-1.5">
+                            <i class="fas fa-align-left text-blue-400"></i> Entrada
+                        </label>
+                        <textarea id="entrada" oninput="autoExpand(this)" placeholder="Intro corta..." class="w-full p-3 xl:p-4 rounded-xl min-h-[60px] resize-none text-sm outline-none shadow-inner focus:scale-[1.01] transition-transform"></textarea>
+                    </div>
                     
-                    if (containerEl) {
-                        let html = post.tipo === 'video' ? cardVideo(post) : cardImage(post);
-                        containerEl.insertAdjacentHTML('beforeend', html);
-                    }
-                }
-            });
-        }
+                    <!-- Fila doble -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-[10px] text-gray-500 uppercase font-bold ml-1 mb-1 block flex items-center gap-1.5">
+                                <i class="fas fa-layer-group text-purple-400"></i> Categoría
+                            </label>
+                            <select id="categoria" class="w-full p-3 xl:p-4 rounded-xl text-xs xl:text-sm outline-none appearance-none cursor-pointer">
+                                <option value="principal">Principal</option>
+                                <option value="plantillas">Plantillas</option>
+                                <option value="animales">Animales</option>
+                                <option value="planeta">Planeta</option>
+                                <option value="humanos">Humanos</option>
+                                <option value="temporada">Temporada</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-gray-500 uppercase font-bold ml-1 mb-1 block flex items-center gap-1.5">
+                                <i class="fas fa-bolt text-yellow-400"></i> Curiosidad
+                            </label>
+                            <input type="text" id="curiosidad" placeholder="¿Dato extra?" class="w-full p-3 xl:p-4 rounded-xl text-xs xl:text-sm outline-none">
+                        </div>
+                    </div>
 
-        function cardVideo(post) { return `<div onclick="openPost('${post.id}')" class="mobile-card overflow-hidden group cursor-pointer tap-effect"><div class="relative aspect-video w-full bg-black"><video src="${post.media_url}#t=1.0" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" preload="metadata" muted playsinline></video><div class="play-overlay"><div class="play-icon"><i class="fas fa-play text-black ml-1 text-2xl"></i></div></div></div><div class="p-5"><h3 class="text-xl font-bold text-dynamic font-sans leading-tight mb-2 line-clamp-2">${post.titulo}</h3></div></div>`; }
-        
-        function cardImage(post) { 
-            return `<div onclick="openPost('${post.id}')" class="mobile-card relative h-80 lg:h-[500px] overflow-hidden group cursor-pointer tap-effect"><img src="${post.media_url}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onerror="this.src='https://via.placeholder.com/400'"><div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div><div class="absolute bottom-0 p-6"><h3 class="text-3xl font-dancing font-bold text-white leading-tight drop-shadow-lg">${post.titulo}</h3></div></div>`; 
-        }
-
-        loadContent();
-    </script>
-
-    <!-- Menu Secreto -->
-    <div id="secret-menu" class="fixed inset-0 z-[100] hidden flex-col items-center justify-center p-5 animate-fade-in text-dynamic">
-        <h2 class="text-brand-neon font-orbitron text-2xl mb-6 uppercase tracking-widest text-center">Control Estacional</h2>
-        <div class="grid grid-cols-3 gap-3 w-full max-w-md">
-            <button onclick="forceTheme(0); toggleSecretMenu()" class="p-2 rounded text-xs font-bold">ENE</button>
-            <button onclick="forceTheme(1); toggleSecretMenu()" class="p-2 rounded text-xs font-bold">FEB</button>
-            <button onclick="forceTheme(2); toggleSecretMenu()" class="p-2 rounded text-xs font-bold">MAR</button>
-            <button onclick="forceTheme(3); toggleSecretMenu()" class="p-2 rounded text-xs font-bold">ABR</button>
-            <button onclick="forceTheme(4); toggleSecretMenu()" class="p-2 rounded text-xs font-bold">MAY</button>
-            <button onclick="forceTheme(5); toggleSecretMenu()" class="p-2 rounded text-xs font-bold">JUN</button>
-            <button onclick="forceTheme(6); toggleSecretMenu()" class="p-2 rounded text-xs font-bold">JUL</button>
-            <button onclick="forceTheme(7); toggleSecretMenu()" class="p-2 rounded text-xs font-bold">AGO</button>
-            <button onclick="forceTheme(8); toggleSecretMenu()" class="p-2 rounded text-xs font-bold">SEP</button>
-            <button onclick="forceTheme(9); toggleSecretMenu()" class="p-2 rounded text-xs font-bold">OCT</button>
-            <button onclick="forceTheme(10); toggleSecretMenu()" class="p-2 rounded text-xs font-bold">NOV</button>
-            <button onclick="forceTheme(11); toggleSecretMenu()" class="p-2 rounded text-xs font-bold">DIC</button>
-        </div>
-        <button onclick="toggleSecretMenu()" class="mt-8 text-sub-dynamic hover:text-dynamic underline text-sm">Cerrar</button>
-    </div>
-
-    <!-- Navbar con WhatsApp arriba -->
-    <nav class="fixed w-full z-50 top-0 glass-nav h-14 lg:h-20 flex items-center justify-between px-5 transition-colors duration-300">
-        <a href="#" onclick="navigateTo('home'); return false;" class="font-dancing text-xl lg:text-3xl font-bold text-dynamic tracking-wider">
-            Interesante<span class="text-brand-neon text-3xl">.</span>
-        </a>
-        <div class="flex items-center gap-5">
-            <!-- Icono WhatsApp Arriba -->
-            <a href="https://whatsapp.com/channel/0029Vb784PP2ZjCuME7S3d3m" target="_blank" class="text-2xl text-whatsapp hover:text-whatsappDark hover:scale-110 transition-all">
-                <i class="fab fa-whatsapp"></i>
-            </a>
-            <button id="menu-btn" onclick="toggleMenu()" class="text-xl text-brand-neon tap-effect p-2"><i class="fas fa-bars"></i></button>
-        </div>
-    </nav>
-
-    <!-- Menú Móvil -->
-    <div id="mobile-menu-overlay" class="fixed inset-0 z-[60] hidden flex flex-col items-center justify-center space-y-8 transition-transform duration-300 translate-x-full">
-        <button onclick="toggleMenu()" class="absolute top-5 right-5 text-2xl text-dynamic hover:text-brand-neon p-4"><i class="fas fa-times"></i></button>
-        <a href="#" onclick="navigateTo('home')" class="text-2xl font-epic text-dynamic hover:text-brand-neon transition-colors">INICIO</a>
-        <a href="#" onclick="navigateTo('plantillas')" class="text-2xl font-epic text-brand-neon hover:text-dynamic transition-colors">PLANTILLAS</a>
-        <a href="#" onclick="navigateTo('animales')" class="text-2xl font-epic text-dynamic hover:text-brand-neon transition-colors">ANIMALES</a>
-        <a href="#" onclick="navigateTo('planeta')" class="text-2xl font-epic text-dynamic hover:text-brand-neon transition-colors">PLANETA</a>
-        <a href="#" onclick="navigateTo('humanos')" class="text-2xl font-epic text-dynamic hover:text-brand-neon transition-colors">HUMANOS</a>
-        <a href="#" onclick="navigateTo('temporada')" class="text-2xl font-epic text-dynamic hover:text-brand-neon transition-colors">TEMPORADA</a>
-        
-        <!-- Link a WhatsApp en Menú Móvil -->
-        <a href="https://whatsapp.com/channel/0029Vb784PP2ZjCuME7S3d3m" target="_blank" class="mt-8 flex items-center gap-3 px-6 py-3 bg-whatsapp text-white rounded-full font-orbitron text-sm font-bold tracking-widest hover:bg-whatsappDark transition-all">
-            <i class="fab fa-whatsapp text-xl"></i> UNIRSE AL CANAL
-        </a>
-    </div>
-
-    <!-- VISTA 1: HOME -->
-    <main id="view-home" class="page-view pb-32 pt-14 lg:pt-20">
-        <!-- Hero Section Simplificada (Fondo viene del global) -->
-        <section class="relative h-[85vh] flex flex-col items-center justify-center overflow-hidden">
-            <!-- Eliminada la imagen local del hero, ahora usamos el fondo global -->
-            
-            <div class="relative z-10 text-center px-4 w-full">
-                <p id="seasonal-subtitle" class="text-brand-neon font-orbitron text-[10px] sm:text-sm tracking-[0.3em] font-bold uppercase mb-4 animate-slide-up">
-                     <!-- Contenido se llena vía JS -->
-                </p>
-                <h1 class="font-orbitron font-black text-2xl sm:text-6xl lg:text-8xl text-dynamic tracking-widest animate-slide-up break-words drop-shadow-2xl">INTERESANTE</h1>
-                <div class="w-20 h-1 bg-brand-neon mx-auto my-6 rounded-full animate-slide-up"></div>
-                
-                <!-- Fila Minimalista -->
-                <div class="flex items-center justify-center gap-10 mt-8 animate-slide-up">
-                    <a href="https://whatsapp.com/channel/0029Vb784PP2ZjCuME7S3d3m" target="_blank" class="text-3xl text-whatsapp hover:text-whatsappDark hover:scale-125 transition-all" title="Canal Oficial">
-                        <i class="fab fa-whatsapp"></i>
-                    </a>
-                    <button onclick="document.getElementById('videos-home').scrollIntoView({behavior:'smooth'})" class="text-2xl text-dynamic opacity-70 hover:opacity-100 transition-colors animate-bounce-slow">
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <button onclick="toggleLightMode()" class="text-2xl text-yellow-400/80 hover:text-yellow-300 hover:scale-125 transition-all" title="Cambiar Tema">
-                        <i class="fas fa-sun"></i>
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECCIÓN VIDEOS HOME -->
-        <section id="videos-home" class="epic-section px-5 min-h-[50vh]">
-            <div class="max-w-7xl mx-auto relative z-10">
-                <h2 class="font-orbitron text-2xl md:text-3xl font-bold text-dynamic mb-8 border-l-4 border-brand-neon pl-4 flex items-center bg-black/20 backdrop-blur-sm rounded-r-lg py-2 inline-block">
-                    VIDEOS <i class="fas fa-play-circle ml-3 text-brand-neon animate-pulse-slow"></i>
-                </h2>
-                <div id="grid-home-videos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-                     <div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECCIÓN VISUAL HOME -->
-        <section class="epic-section px-5 min-h-[50vh]">
-            <div class="max-w-7xl mx-auto relative z-10">
-                <h2 class="font-orbitron text-2xl md:text-3xl font-bold text-dynamic mb-8 flex justify-between items-center border-b border-brand-neon/30 pb-2 bg-black/20 backdrop-blur-sm px-4 rounded-t-lg">
-                    VISUAL <i class="fas fa-eye text-brand-neon"></i>
-                </h2>
-                <div id="grid-home-visual" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-                    <div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- WhatsApp al final de la categoría -->
-        <div class="w-full flex justify-center py-12">
-            <a href="https://whatsapp.com/channel/0029Vb784PP2ZjCuME7S3d3m" target="_blank" class="flex items-center gap-3 text-whatsapp hover:text-whatsappDark font-orbitron text-xs font-bold tracking-[0.2em] border border-whatsapp/30 px-8 py-3 rounded-full hover:bg-whatsapp/10 transition-all group backdrop-blur-sm bg-black/30">
-                <i class="fab fa-whatsapp text-lg group-hover:scale-110 transition-transform"></i> CANAL OFICIAL
-            </a>
-        </div>
-    </main>
-
-    <!-- VISTAS DE CATEGORÍA UNIFICADAS -->
-    <main id="view-plantillas" class="page-view hidden pt-24 pb-32">
-        <div class="px-5 mb-10"><h1 class="text-4xl md:text-6xl font-orbitron font-bold text-brand-neon text-center drop-shadow-lg">PLANTILLAS</h1></div>
-        <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4 bg-black/20 inline-block pr-4 py-1 backdrop-blur-sm">VIDEOS</h2><div id="grid-plantillas-videos" class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
-        <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4 bg-black/20 inline-block pr-4 py-1 backdrop-blur-sm">VISUAL</h2><div id="grid-plantillas-visual" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
-        
-        <div class="w-full flex justify-center py-12">
-            <a href="https://whatsapp.com/channel/0029Vb784PP2ZjCuME7S3d3m" target="_blank" class="flex items-center gap-3 text-whatsapp hover:text-whatsappDark font-orbitron text-xs font-bold tracking-[0.2em] border border-whatsapp/30 px-8 py-3 rounded-full hover:bg-whatsapp/10 transition-all group backdrop-blur-sm bg-black/30">
-                <i class="fab fa-whatsapp text-lg group-hover:scale-110 transition-transform"></i> CANAL OFICIAL
-            </a>
-        </div>
-    </main>
-
-    <main id="view-animales" class="page-view hidden pt-24 pb-32">
-        <div class="px-5 mb-10"><h1 class="text-4xl md:text-6xl font-orbitron font-bold text-dynamic text-center drop-shadow-lg">ANIMALES</h1></div>
-        <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4 bg-black/20 inline-block pr-4 py-1 backdrop-blur-sm">VIDEOS</h2><div id="grid-animales-videos" class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
-        <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4 bg-black/20 inline-block pr-4 py-1 backdrop-blur-sm">VISUAL</h2><div id="grid-animales-visual" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
-        
-        <div class="w-full flex justify-center py-12">
-            <a href="https://whatsapp.com/channel/0029Vb784PP2ZjCuME7S3d3m" target="_blank" class="flex items-center gap-3 text-whatsapp hover:text-whatsappDark font-orbitron text-xs font-bold tracking-[0.2em] border border-whatsapp/30 px-8 py-3 rounded-full hover:bg-whatsapp/10 transition-all group backdrop-blur-sm bg-black/30">
-                <i class="fab fa-whatsapp text-lg group-hover:scale-110 transition-transform"></i> CANAL OFICIAL
-            </a>
-        </div>
-    </main>
-
-    <main id="view-planeta" class="page-view hidden pt-24 pb-32">
-        <div class="px-5 mb-10"><h1 class="text-4xl md:text-6xl font-orbitron font-bold text-brand-neon text-center drop-shadow-lg">PLANETA</h1></div>
-        <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4 bg-black/20 inline-block pr-4 py-1 backdrop-blur-sm">VIDEOS</h2><div id="grid-planeta-videos" class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
-        <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4 bg-black/20 inline-block pr-4 py-1 backdrop-blur-sm">VISUAL</h2><div id="grid-planeta-visual" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
-        
-        <div class="w-full flex justify-center py-12">
-            <a href="https://whatsapp.com/channel/0029Vb784PP2ZjCuME7S3d3m" target="_blank" class="flex items-center gap-3 text-whatsapp hover:text-whatsappDark font-orbitron text-xs font-bold tracking-[0.2em] border border-whatsapp/30 px-8 py-3 rounded-full hover:bg-whatsapp/10 transition-all group backdrop-blur-sm bg-black/30">
-                <i class="fab fa-whatsapp text-lg group-hover:scale-110 transition-transform"></i> CANAL OFICIAL
-            </a>
-        </div>
-    </main>
-
-    <main id="view-humanos" class="page-view hidden pt-24 pb-32">
-        <div class="px-5 mb-10"><h1 class="text-4xl md:text-6xl font-orbitron font-bold text-dynamic text-center drop-shadow-lg">HUMANOS</h1></div>
-        <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4 bg-black/20 inline-block pr-4 py-1 backdrop-blur-sm">VIDEOS</h2><div id="grid-humanos-videos" class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
-        <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4 bg-black/20 inline-block pr-4 py-1 backdrop-blur-sm">VISUAL</h2><div id="grid-humanos-visual" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
-        
-        <div class="w-full flex justify-center py-12">
-            <a href="https://whatsapp.com/channel/0029Vb784PP2ZjCuME7S3d3m" target="_blank" class="flex items-center gap-3 text-whatsapp hover:text-whatsappDark font-orbitron text-xs font-bold tracking-[0.2em] border border-whatsapp/30 px-8 py-3 rounded-full hover:bg-whatsapp/10 transition-all group backdrop-blur-sm bg-black/30">
-                <i class="fab fa-whatsapp text-lg group-hover:scale-110 transition-transform"></i> CANAL OFICIAL
-            </a>
-        </div>
-    </main>
-
-    <main id="view-temporada" class="page-view hidden pt-24 pb-32">
-        <div class="px-5 mb-10"><h1 class="text-4xl md:text-6xl font-orbitron font-bold text-brand-neon text-center drop-shadow-lg">TEMPORADA</h1></div>
-        <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4 bg-black/20 inline-block pr-4 py-1 backdrop-blur-sm">VIDEOS</h2><div id="grid-temporada-videos" class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
-        <section class="epic-section px-5"><div class="max-w-7xl mx-auto relative z-10"><h2 class="text-2xl font-bold text-dynamic mb-6 border-l-4 border-brand-neon pl-4 bg-black/20 inline-block pr-4 py-1 backdrop-blur-sm">VISUAL</h2><div id="grid-temporada-visual" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8"><div class="loading-spinner"><i class="fas fa-circle-notch fa-spin text-3xl text-brand-neon"></i></div></div></div></section>
-        
-        <div class="w-full flex justify-center py-12">
-            <a href="https://whatsapp.com/channel/0029Vb784PP2ZjCuME7S3d3m" target="_blank" class="flex items-center gap-3 text-whatsapp hover:text-whatsappDark font-orbitron text-xs font-bold tracking-[0.2em] border border-whatsapp/30 px-8 py-3 rounded-full hover:bg-whatsapp/10 transition-all group backdrop-blur-sm bg-black/30">
-                <i class="fab fa-whatsapp text-lg group-hover:scale-110 transition-transform"></i> CANAL OFICIAL
-            </a>
-        </div>
-    </main>
-
-    <!-- FOOTER FINAL -->
-    <footer class="py-24 px-5 text-center transition-colors duration-300">
-        <div class="max-w-5xl mx-auto">
-            <h4 class="font-orbitron text-[10px] font-bold text-brand-neon tracking-[0.4em] mb-10 uppercase drop-shadow-md">Explorar Categorías</h4>
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-16">
-                <button onclick="navigateTo('home')" class="category-chip py-3 px-4 rounded-xl text-xs font-orbitron font-bold tracking-wider tap-effect transition-all">INICIO</button>
-                <button onclick="navigateTo('plantillas')" class="category-chip py-3 px-4 rounded-xl text-xs font-orbitron font-bold tracking-wider tap-effect transition-all">PLANTILLAS</button>
-                <button onclick="navigateTo('animales')" class="category-chip py-3 px-4 rounded-xl text-xs font-orbitron font-bold tracking-wider tap-effect transition-all">ANIMALES</button>
-                <button onclick="navigateTo('planeta')" class="category-chip py-3 px-4 rounded-xl text-xs font-orbitron font-bold tracking-wider tap-effect transition-all">PLANETA</button>
-                <button onclick="navigateTo('humanos')" class="category-chip py-3 px-4 rounded-xl text-xs font-orbitron font-bold tracking-wider tap-effect transition-all">HUMANOS</button>
-                <button onclick="navigateTo('temporada')" class="category-chip py-3 px-4 rounded-xl text-xs font-orbitron font-bold tracking-wider tap-effect transition-all">TEMPORADA</button>
-            </div>
-            <p class="text-sub-dynamic font-orbitron text-[9px] uppercase opacity-70">
-                <span class="cursor-pointer select-none px-2 py-1 hover:text-brand-neon transition-colors" onclick="showCreator()">&copy;</span> 
-                <span class="cursor-pointer hover:text-brand-neon font-bold px-1" onclick="toggleLightMode()" title="Cambiar Tema">2026</span> 
-                <span class="cursor-pointer hover:text-brand-neon font-bold tracking-widest" onclick="toggleSecretMenu()" title="Seleccionar Mes">INTERESANTE.</span>
-            </p>
-        </div>
-    </footer>
-
-    <!-- DOCK FLOTANTE -->
-    <div id="bottom-dock" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 rounded-2xl px-4 py-2 flex gap-5 md:gap-8 transition-all duration-300">
-        <i id="dock-home" onclick="navigateTo('home')" class="fas fa-home text-xl cursor-pointer hover:scale-110 transition-all text-cyan-400" title="Inicio"></i>
-        <i id="dock-plantillas" onclick="navigateTo('plantillas')" class="fas fa-file-alt text-xl cursor-pointer hover:scale-110 transition-all text-gray-500 hover:text-brand-neon" title="Plantillas"></i>
-        <i id="dock-animales" onclick="navigateTo('animales')" class="fas fa-paw text-xl cursor-pointer hover:scale-110 transition-all text-gray-500 hover:text-brand-neon" title="Animales"></i>
-        <i id="dock-planeta" onclick="navigateTo('planeta')" class="fas fa-globe-americas text-xl cursor-pointer hover:scale-110 transition-all text-gray-500 hover:text-brand-neon" title="Planeta"></i>
-        <i id="dock-humanos" onclick="navigateTo('humanos')" class="fas fa-brain text-xl cursor-pointer hover:scale-110 transition-all text-gray-500 hover:text-brand-neon" title="Humanos"></i>
-        <i id="dock-temporada" onclick="navigateTo('temporada')" class="fas fa-fire text-xl cursor-pointer hover:scale-110 transition-all text-orange-500" title="Temporada"></i>
-    </div>
-
-    <!-- MODAL (Detalle Post) -->
-    <div id="info-modal" class="fixed inset-0 z-[100] hidden overflow-y-auto animate-fade-in">
-        <button onclick="closeModal()" class="fixed top-4 right-4 z-50 bg-black/50 p-3 rounded-full border border-brand-neon text-brand-neon hover:bg-red-900 hover:border-red-500 hover:text-white transition-colors"><i class="fas fa-times"></i></button>
-        <div class="min-h-screen pb-10">
-            <div id="modal-media-wrapper" class="w-full flex items-center justify-center relative bg-black transition-all"></div>
-            <div class="max-w-5xl mx-auto px-6 mt-8 relative z-10">
-                <div class="bg-[#111] rounded-3xl p-8 lg:p-12 border border-brand-neon/30 transition-all duration-300">
-                    <div class="w-16 h-1 bg-brand-neon mx-auto rounded-full mb-8"></div>
-                    <span id="modal-cat" class="text-brand-neon text-xs font-bold tracking-widest uppercase mb-3 block">CATEGORÍA</span>
-                    <h2 id="modal-title" class="text-3xl lg:text-6xl font-bold font-dancing text-white mb-6 leading-tight">Título</h2>
-                    <div id="modal-body" class="text-gray-300 text-lg leading-relaxed space-y-6 font-sans"></div>
-                    <div class="mt-10 p-6 bg-black rounded-2xl border-l-4 border-brand-neon">
-                        <p class="text-sm text-gray-400 italic flex gap-3"><i class="fas fa-lightbulb text-brand-neon text-xl mt-1"></i> <span id="modal-fact">Curiosidad...</span></p>
+                    <!-- Descripción -->
+                    <div>
+                        <label class="text-[10px] text-gray-500 uppercase font-bold ml-1 mb-1 block flex items-center gap-1.5">
+                            <i class="fas fa-align-justify text-green-400"></i> Descripción
+                        </label>
+                        <textarea id="descripcion" oninput="autoExpand(this)" placeholder="Contenido completo..." class="w-full p-3 xl:p-4 rounded-xl min-h-[100px] resize-none text-sm outline-none shadow-inner focus:scale-[1.01] transition-transform"></textarea>
+                    </div>
+                    
+                    <!-- Multimedia -->
+                    <div>
+                        <label class="text-[10px] text-gray-500 uppercase font-bold ml-1 mb-2 block flex justify-between items-center">
+                            <span class="flex items-center gap-1.5"><i class="fas fa-photo-film text-pink-400"></i> Multimedia</span>
+                            <span id="media-status" class="text-[#39ff14] text-[9px] hidden bg-[#39ff14]/10 px-2 py-0.5 rounded border border-[#39ff14]/20 flex items-center gap-1">
+                                <i class="fas fa-circle-check"></i> Conservar
+                            </span>
+                        </label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="relative group">
+                                <input type="file" id="archivoImg" accept="image/*" class="hidden">
+                                <label for="archivoImg" id="label-Img" class="btn-upload flex flex-col items-center justify-center p-4 rounded-xl cursor-pointer transition-all hover:border-[#39ff14]/30 hover:bg-[#39ff14]/5 active:scale-95 h-20 xl:h-24 relative overflow-hidden">
+                                    <div class="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-blue-500/0 group-hover:to-blue-500/10 transition-all duration-500"></div>
+                                    <i class="fas fa-camera text-xl mb-1 text-blue-400 group-hover:scale-110 transition-transform relative z-10"></i>
+                                    <span class="text-[9px] text-gray-500 uppercase font-bold group-hover:text-blue-300 relative z-10 transition-colors">Imagen</span>
+                                </label>
+                            </div>
+                            
+                            <div class="relative group">
+                                <input type="file" id="archivoVid" accept="video/*,video/mp4,video/quicktime" class="hidden">
+                                <label for="archivoVid" id="label-Vid" class="btn-upload flex flex-col items-center justify-center p-4 rounded-xl cursor-pointer transition-all hover:border-[#39ff14]/30 hover:bg-[#39ff14]/5 active:scale-95 h-20 xl:h-24 relative overflow-hidden">
+                                    <div class="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-purple-500/0 group-hover:to-purple-500/10 transition-all duration-500"></div>
+                                    <i class="fas fa-clapperboard text-xl mb-1 text-purple-400 group-hover:scale-110 transition-transform relative z-10"></i>
+                                    <span class="text-[9px] text-gray-500 uppercase font-bold group-hover:text-purple-300 relative z-10 transition-colors">Vídeo</span>
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Botones -->
+                <div class="mt-4 pt-4 border-t border-white/5 flex gap-3 flex-shrink-0">
+                    <button onclick="cancelarEdicion()" id="cancel-btn" class="hidden w-1/3 bg-[#111] text-gray-400 font-epic py-3 rounded-xl hover:bg-[#222] hover:text-white uppercase text-[10px] border border-white/5 transition-all">
+                        <i class="fas fa-ban mr-1"></i> CANCELAR
+                    </button>
+                    <!-- Botón de Envío: SIN DISABLED INICIAL -->
+                    <button onclick="subirContenido()" id="submit-btn" class="w-full bg-[#39ff14] text-black font-epic py-3.5 rounded-xl hover:brightness-110 hover:shadow-[0_0_25px_rgba(57,255,20,0.3)] active:scale-[0.98] transition-all shadow-[0_0_15px_rgba(57,255,20,0.15)] uppercase text-[12px] font-bold tracking-widest disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fas fa-cloud-arrow-up mr-2"></i> SUBIR A LA RED
+                    </button>
+                </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <!-- MODAL PANTALLA COMPLETA (Para Doble Click) -->
-    <div id="fullscreen-modal" class="fixed inset-0 z-[200] hidden bg-black flex items-center justify-center p-0" onclick="closeFullscreen()">
-        <img id="fullscreen-img" src="" class="max-w-full max-h-full object-contain pointer-events-none">
-        <button onclick="closeFullscreen()" class="absolute top-5 right-5 text-white text-3xl opacity-75 hover:opacity-100"><i class="fas fa-times"></i></button>
-    </div>
+        <!-- COLUMNA DERECHA: DASHBOARD -->
+        <section class="flex-1 w-full min-w-0">
+            <!-- Header Dashboard -->
+            <div class="flex items-center justify-between mb-6 sticky top-0 bg-[#020202]/90 backdrop-blur-md z-10 py-4 border-b border-[#39ff14]/10">
+                <div class="flex items-center gap-3">
+                    <div class="w-1.5 h-6 bg-[#39ff14] rounded-full shadow-[0_0_10px_#39ff14]"></div>
+                    <h2 class="font-epic text-sm md:text-base text-white tracking-widest"><i class="fas fa-th-large mr-2"></i> DASHBOARD</h2>
+                </div>
+                <div class="text-[10px] text-gray-400 uppercase font-bold bg-[#111] px-3 py-1.5 rounded-full border border-white/10 flex items-center gap-2">
+                    <span id="status-dot" class="w-1.5 h-1.5 rounded-full bg-yellow-500 animate-pulse"></span>
+                    <span id="status-text">Conectando</span>
+                </div>
+            </div>
+            
+            <!-- Grid de Contenido -->
+            <div id="lista-posts" class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5 md:gap-6">
+                <!-- Estado de Carga -->
+                <div class="col-span-full h-40 flex flex-col items-center justify-center text-gray-600 bg-[#050505] rounded-3xl border border-dashed border-white/10">
+                    <i class="fas fa-satellite-dish fa-spin text-2xl mb-4 text-[#39ff14]/50"></i>
+                    <span class="text-xs tracking-widest font-epic">SINCRONIZANDO...</span>
+                </div>
+            </div>
+        </section>
 
-    <!-- UI Logic Scripts -->
-    <script>
-        // Lógica de Doble Click (SOLO EN MODAL)
-        window.openFullscreenImage = function(url) {
-            const modal = document.getElementById('fullscreen-modal');
-            const img = document.getElementById('fullscreen-img');
-            img.src = url;
-            modal.classList.remove('hidden');
-        }
+    </main>
 
-        window.closeFullscreen = function() {
-            document.getElementById('fullscreen-modal').classList.add('hidden');
-        }
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // Definición de Temas con Imágenes de Fondo Específicas (Rutas Locales)
-        const themes = {
-            0: { name: 'jan', class: 'theme-jan', icon: 'fa-cube', sub: 'Enero', bg: 'Imagenes/Enero.webp' },
-            1: { name: 'feb', class: 'theme-feb', icon: 'fa-heart', sub: 'Febrero', bg: 'Imagenes/Febrero.webp' },
-            2: { name: 'mar', class: 'theme-mar', icon: 'fa-seedling', sub: 'Marzo', bg: 'Imagenes/Marzo.webp' },
-            3: { name: 'apr', class: 'theme-apr', icon: 'fa-frog', sub: 'Abril', bg: 'Imagenes/Abril.webp' },
-            4: { name: 'may', class: 'theme-may', icon: 'fa-spa', sub: 'Mayo', bg: 'Imagenes/Mayo.webp' },
-            5: { name: 'jun', class: 'theme-jun', icon: 'fa-sun', sub: 'Junio', bg: 'Imagenes/Junio.webp' },
-            6: { name: 'jul', class: 'theme-jul', icon: 'fa-tree', sub: 'Julio', bg: 'Imagenes/Julio.webp' },
-            7: { name: 'aug', class: 'theme-aug', icon: 'fa-leaf', sub: 'Agosto', bg: 'Imagenes/Agosto.webp' },
-            8: { name: 'sep', class: 'theme-sep', icon: 'fa-wind', sub: 'Septiembre', bg: 'Imagenes/Septiembre.webp' },
-            9: { name: 'oct', class: 'theme-oct', icon: 'fa-ghost', sub: 'Octubre', bg: 'Imagenes/Octubre.webp' },
-            10: { name: 'nov', class: 'theme-nov', icon: 'fa-feather-alt', sub: 'Noviembre', bg: 'Imagenes/Noviembre.webp' },
-            11: { name: 'dec', class: 'theme-dec', icon: 'fa-snowflake', sub: 'Diciembre', bg: 'Imagenes/Diciembre.webp' }
+        // --- CONFIGURACIÓN DE FIREBASE ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyBF2GoCkpWo_gnggZjcSRjb062CPhUUEto",
+            authDomain: "devcenter-15.firebaseapp.com",
+            projectId: "devcenter-15",
+            storageBucket: "devcenter-15.firebasestorage.app",
+            messagingSenderId: "354151968683",
+            appId: "1:354151968683:web:ffb17232a6843224f2ecee",
+            measurementId: "G-WSP7DT3LPE"
         };
 
-        function applySeasonalTheme(monthIndex = null) {
-            const date = new Date();
-            const month = monthIndex !== null ? monthIndex : date.getMonth();
-            const theme = themes[month];
-            
-            // Detección automática al cargar o manual
-            const isLight = document.body.classList.contains('light-mode');
-            document.body.className = `antialiased selection:bg-brand-neon selection:text-black transition-colors duration-300 ${theme.class} ${isLight ? 'light-mode' : ''}`;
-            
-            const sub = document.getElementById('seasonal-subtitle');
-            if(sub) sub.innerHTML = `<i class="fas ${theme.icon} mr-2 hidden lg:inline"></i> NO ES MAGIA NI CREENCIAS SIMPLEMENTE <i class="fas ${theme.icon} ml-2 hidden lg:inline"></i>`;
-
-            // CAMBIO CLAVE: Actualizar el fondo GLOBAL en lugar de la imagen del Hero
-            const bgImg = document.getElementById('global-bg-image');
-            if(bgImg && theme.bg) {
-                if (bgImg.src !== theme.bg) {
-                    bgImg.style.opacity = '0';
-                    setTimeout(() => {
-                        bgImg.src = theme.bg;
-                        bgImg.onload = () => { 
-                            // Restaurar opacidad al cargar (Lógica Light/Dark manejada en CSS)
-                            bgImg.style.opacity = ''; // Limpiar estilo inline para que CSS actúe
-                        }; 
-                    }, 500);
-                }
-            }
-        }
-
-        function forceTheme(monthIndex) {
-            applySeasonalTheme(monthIndex);
-        }
-
-        function toggleLightMode() {
-            document.body.classList.toggle('light-mode');
-            const isLight = document.body.classList.contains('light-mode');
-            
-            // GUARDAR PREFERENCIA
-            localStorage.setItem('theme', isLight ? 'light' : 'dark');
-
-            const currentClass = document.body.className.match(/theme-[a-z]{3}/)[0];
-            const monthKey = Object.keys(themes).find(key => themes[key].class === currentClass);
-            applySeasonalTheme(parseInt(monthKey));
-        }
-
-        window.showCreator = function() {
-            const alertBox = document.createElement('div');
-            alertBox.className = 'fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-black/90 border border-brand-neon text-white px-6 py-3 rounded-full z-[100] animate-slide-up font-orbitron text-xs tracking-widest flex items-center';
-            alertBox.innerHTML = '<i class="fas fa-code mr-2 text-brand-neon"></i> Creado por <span class="font-bold text-brand-neon ml-1">DevCenterX</span>';
-            document.body.appendChild(alertBox);
-            setTimeout(() => alertBox.remove(), 3000);
-        }
-
-        // DETECCION AUTOMATICA DE TEMA (Con Persistencia)
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light') {
-            document.body.classList.add('light-mode');
-        } else if (savedTheme === 'dark') {
-            document.body.classList.remove('light-mode');
-        } else {
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-                document.body.classList.add('light-mode');
-            }
-        }
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
         
-        window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', event => {
-            if (!localStorage.getItem('theme')) {
-                if (event.matches) {
-                    document.body.classList.add('light-mode');
-                } else {
-                    document.body.classList.remove('light-mode');
-                }
-                const currentClass = document.body.className.match(/theme-[a-z]{3}/)[0];
-                const monthKey = Object.keys(themes).find(key => themes[key].class === currentClass);
-                applySeasonalTheme(parseInt(monthKey));
+        // Variables Globales
+        let editModeId = null; 
+        let currentMediaUrl = null;
+        let currentResourceType = null; // IMPORTANTE: Guarda si era video o imagen
+        const btn = document.getElementById('submit-btn');
+
+        // --- FUNCIONES DE SUBIDA ---
+        function updateProgress(percent) {
+            let progressBar = document.getElementById('progress-bar');
+            if (!progressBar) {
+                btn.style.position = 'relative';
+                btn.innerHTML = '<div id="progress-bar" class="progress-bar" style="width: 0%;"></div><span id="progress-text">SUBIENDO...</span>';
+                const style = document.createElement('style');
+                style.textContent = `
+                    .progress-bar {
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        height: 4px;
+                        background: #39ff14;
+                        transition: width 0.3s ease;
+                        border-radius: 2px;
+                    }
+                    #progress-text {
+                        position: relative;
+                        z-index: 1;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            progressBar.style.width = percent + '%';
+            document.getElementById('progress-text').textContent = 'SUBIENDO... ' + percent + '%';
+        }
+
+        function uploadWithProgress(formData, resourceType) {
+            return new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.upload.addEventListener('progress', (e) => {
+                    if (e.lengthComputable) {
+                        const percent = Math.round((e.loaded / e.total) * 100);
+                        updateProgress(percent);
+                    }
+                });
+                xhr.addEventListener('load', () => {
+                    if (xhr.status === 200) {
+                        const dataCloud = JSON.parse(xhr.responseText);
+                        if (dataCloud.error) {
+                            reject(new Error(dataCloud.error.message));
+                        } else {
+                            resolve(dataCloud.secure_url);
+                        }
+                    } else {
+                        reject(new Error('Upload failed'));
+                    }
+                });
+                xhr.addEventListener('error', () => reject(new Error('Network error')));
+                xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${resourceType}/upload`);
+                xhr.send(formData);
+            });
+        }
+
+        // --- FUNCIONES DEL MODAL (VISTA PREVIA) ---
+        window.abrirModalMedia = function(url, tipo) {
+            const modal = document.getElementById('media-modal');
+            const content = document.getElementById('modal-content');
+            
+            modal.classList.remove('hidden');
+            
+            if (tipo === 'video') {
+                content.innerHTML = `
+                    <video src="${url}" controls autoplay playsinline class="max-w-full max-h-[85vh] rounded-lg shadow-2xl bg-black"></video>
+                `;
+            } else {
+                content.innerHTML = `
+                    <img src="${url}" class="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl bg-black">
+                `;
+            }
+        }
+
+        window.cerrarModalMedia = function() {
+            const modal = document.getElementById('media-modal');
+            const content = document.getElementById('modal-content');
+            modal.classList.add('hidden');
+            content.innerHTML = ''; 
+        }
+
+        // --- AUTENTICACIÓN Y ESTADO ---
+        function actualizarEstadoConexion(conectado) {
+            const dot = document.getElementById('status-dot');
+            const text = document.getElementById('status-text');
+            if(conectado) {
+                dot.className = "w-1.5 h-1.5 rounded-full bg-[#39ff14] shadow-[0_0_5px_#39ff14]";
+                text.innerText = "En línea";
+            } else {
+                dot.className = "w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse";
+                text.innerText = "Desconectado";
+            }
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                actualizarEstadoConexion(true);
+                cargarPosts(); 
             }
         });
 
-        applySeasonalTheme();
-
-        window.toggleSecretMenu = function() {
-            const menu = document.getElementById('secret-menu');
-            if (menu.classList.contains('hidden')) {
-                menu.classList.remove('hidden');
-                menu.classList.add('flex');
-            } else {
-                menu.classList.add('hidden');
-                menu.classList.remove('flex');
+        async function conectarUsuario() {
+            try {
+                await signInAnonymously(auth);
+            } catch (error) {
+                console.warn("Modo público activo (Auth opcional):", error.code);
+                actualizarEstadoConexion(true);
+                cargarPosts();
             }
         }
+        conectarUsuario();
 
-        let lastScroll = 0;
-        window.navigateTo = function(viewId) {
-            document.querySelectorAll('.page-view').forEach(el => el.classList.add('hidden'));
-            const target = document.getElementById('view-' + viewId);
-            if(target) target.classList.remove('hidden');
-            window.scrollTo(0, 0);
-            lastScroll = 0; 
-            const dock = document.getElementById('bottom-dock');
-            if (dock) dock.classList.remove('hidden-dock');
-            const menu = document.getElementById('mobile-menu-overlay');
-            if (menu) {
-                menu.classList.add('translate-x-full');
-                setTimeout(() => menu.classList.add('hidden'), 300);
-            }
-            updateDockColors(viewId);
-        }
+        // --- GESTIÓN DE POSTS ---
 
-        function updateDockColors(activeId) {
-            const icons = document.querySelectorAll('#bottom-dock i');
-            icons.forEach(icon => {
-                if(icon.id !== 'dock-temporada') {
-                     icon.className = icon.className.replace(/text-(brand-neon|cyan-400|white)/g, ''); 
-                     icon.classList.remove('scale-110');
-                     icon.classList.add('text-gray-500');
-                } else {
-                    icon.classList.remove('scale-110');
-                    icon.classList.remove('text-orange-400');
-                    icon.classList.add('text-orange-500');
-                }
-            });
-
-            const activeIcon = document.getElementById('dock-' + activeId);
-            if(activeIcon) {
-                if (activeId !== 'temporada') {
-                    activeIcon.classList.remove('text-gray-500');
-                }
-                activeIcon.classList.add('scale-110');
+        // 1. Cargar Posts
+        window.cargarPosts = async function() {
+            const listaDiv = document.getElementById('lista-posts');
+            try {
+                const q = query(collection(db, 'productos')); 
+                const querySnapshot = await getDocs(q);
                 
-                if (activeId === 'home') activeIcon.classList.add('text-cyan-400');
-                else if (activeId === 'temporada') {
-                     activeIcon.classList.remove('text-orange-500'); 
-                     activeIcon.classList.add('text-orange-400');
+                let posts = [];
+                querySnapshot.forEach((doc) => {
+                    posts.push({ id: doc.id, ...doc.data() });
+                });
+
+                posts.sort((a, b) => {
+                    const dateA = a.fecha ? a.fecha.seconds : 0;
+                    const dateB = b.fecha ? b.fecha.seconds : 0;
+                    return dateB - dateA;
+                });
+
+                if(posts.length === 0) {
+                    listaDiv.innerHTML = '<div class="col-span-full flex flex-col items-center justify-center text-gray-500 py-20 bg-[#050505] rounded-3xl border border-white/5"><i class="fas fa-folder-open text-4xl mb-4 opacity-50"></i><span class="text-sm">No hay publicaciones aún.</span></div>';
+                    return;
                 }
-                else activeIcon.classList.add('text-brand-neon');
+
+                listaDiv.innerHTML = '';
+                posts.forEach(post => {
+                    const safePost = JSON.stringify(post).replace(/'/g, "&#39;");
+                    const safeId = post.id.replace(/'/g, "\\'");
+                    
+                    let mediaThumbnailHTML = '';
+                    if(post.tipo === 'video') {
+                        mediaThumbnailHTML = `
+                            <div class="relative w-full h-full flex items-center justify-center group cursor-pointer bg-[#000]" onclick="abrirModalMedia('${post.media_url}', 'video')">
+                                <div class="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-all z-10"></div>
+                                <div class="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center group-hover:scale-110 transition-transform z-20 border border-white/20 shadow-lg">
+                                    <i class="fas fa-play text-white pl-1 text-lg"></i>
+                                </div>
+                                <video src="${post.media_url}" class="absolute inset-0 w-full h-full object-cover opacity-80" muted></video>
+                            </div>
+                        `;
+                    } else {
+                        mediaThumbnailHTML = `
+                            <div class="w-full h-full cursor-pointer group bg-[#000] relative overflow-hidden" onclick="abrirModalMedia('${post.media_url}', 'image')">
+                                <img src="${post.media_url}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" onerror="this.src='https://via.placeholder.com/150?text=No+Img'">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80"></div>
+                            </div>
+                        `;
+                    }
+
+                    const item = document.createElement('div');
+                    item.className = 'post-item bg-[#080808] p-4 rounded-[1.5rem] flex flex-col gap-4 border border-white/5 relative overflow-hidden group hover:border-[#39ff14]/30';
+                    item.innerHTML = `
+                        <!-- Media Preview -->
+                        <div class="w-full aspect-video bg-[#111] rounded-2xl flex items-center justify-center overflow-hidden relative shadow-lg border border-white/5">
+                            ${mediaThumbnailHTML}
+                            <div class="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] text-white/90 font-bold uppercase border border-white/10 z-20 tracking-wider shadow-sm">
+                                ${post.categoria || 'General'}
+                            </div>
+                        </div>
+                        
+                        <!-- Content -->
+                        <div class="flex-1 min-w-0 flex flex-col px-1">
+                            <h3 class="text-white text-base font-bold truncate pr-2 font-epic tracking-wide leading-tight">${post.titulo || 'Sin Título'}</h3>
+                            <p class="text-gray-500 text-xs mt-2 line-clamp-2 leading-relaxed h-10">${post.entrada || 'Sin descripción previa...'}</p>
+                            
+                            <div class="mt-auto pt-4 flex justify-between items-center border-t border-white/5">
+                                <span class="text-[10px] text-gray-600 font-mono tracking-tighter flex items-center gap-1.5">
+                                    <i class="far fa-clock text-xs"></i> 
+                                    ${post.fecha ? new Date(post.fecha.seconds * 1000).toLocaleDateString() : 'Reciente'}
+                                </span>
+                                <div class="flex gap-2">
+                                    <button onclick='prepararEdicion(${safePost})' class="w-9 h-9 rounded-full bg-[#39ff14]/5 text-[#39ff14] hover:bg-[#39ff14] hover:text-black transition-all flex items-center justify-center border border-[#39ff14]/10 hover:shadow-[0_0_15px_rgba(57,255,20,0.3)] group-hover:translate-x-0">
+                                        <i class="fas fa-pen text-xs"></i>
+                                    </button>
+                                    <button onclick="eliminarPost('${safeId}', this)" class="w-9 h-9 rounded-full bg-red-500/5 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center border border-red-500/10 hover:shadow-[0_0_15px_rgba(239,68,68,0.3)]">
+                                        <i class="fas fa-trash text-xs"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    listaDiv.appendChild(item);
+                });
+
+            } catch (error) {
+                console.error("Error cargando posts:", error);
+                listaDiv.innerHTML = `<div class="col-span-full text-center text-red-500 text-xs py-10 bg-[#050505] rounded-2xl border border-red-900/20">Error: ${error.message}</div>`;
             }
         }
 
-        window.toggleMenu = function() {
-            const menu = document.getElementById('mobile-menu-overlay');
-            if(!menu) return;
-            if(menu.classList.contains('hidden')) {
-                menu.classList.remove('hidden');
-                setTimeout(() => menu.classList.remove('translate-x-full'), 10);
-            } else {
-                menu.classList.add('translate-x-full');
-                setTimeout(() => menu.classList.add('hidden'), 300);
-            }
-        }
-
-        window.openPost = function(id) {
-            const post = window.allPosts[id];
-            if(!post) return;
-            document.getElementById('modal-title').innerText = post.titulo;
-            document.getElementById('modal-cat').innerText = post.categoria;
-            document.getElementById('modal-body').innerHTML = `<p>${(post.descripcion || '').replace(/\n/g, '<br>')}</p>`;
-            document.getElementById('modal-fact').innerText = post.curiosidad || '...';
+        // 2. Borrar Post
+        window.eliminarPost = async function(id, btnElement) {
+            if(!confirm("⚠️ ¿Estás seguro de eliminar este contenido permanentemente?")) return;
             
-            const mediaWrapper = document.getElementById('modal-media-wrapper');
-            if(post.tipo === 'video') {
-                mediaWrapper.className = "w-full aspect-video bg-black flex items-center justify-center relative rounded-b-3xl overflow-hidden mt-8 mb-4 border-y border-var(--card-border)";
-                mediaWrapper.innerHTML = `
-                    <video controls autoplay class="relative z-10 w-full h-full max-h-[80vh] object-contain">
-                        <source src="${post.media_url}" type="video/mp4">
-                    </video>
+            if(btnElement) {
+                btnElement.innerHTML = '<i class="fas fa-spinner fa-spin text-xs"></i>';
+                btnElement.disabled = true;
+            }
+
+            try {
+                await deleteDoc(doc(db, "productos", id));
+                mostrarMensaje("Post eliminado correctamente", "success");
+                await cargarPosts(); 
+            } catch (e) {
+                console.error(e);
+                let errorMsg = e.message;
+                if(errorMsg.includes("Missing or insufficient permissions")) {
+                    errorMsg = "Sin permisos. Verifica las Reglas en Firebase (ponlas públicas).";
+                }
+                mostrarMensaje("Error al eliminar: " + errorMsg, "error");
+                
+                if(btnElement) {
+                    btnElement.innerHTML = '<i class="fas fa-trash text-xs"></i>';
+                    btnElement.disabled = false;
+                }
+            }
+        }
+
+        // 3. Preparar Edición
+        window.prepararEdicion = function(post) {
+            editModeId = post.id;
+            currentMediaUrl = post.media_url;
+            currentResourceType = post.tipo; // GUARDAR EL TIPO EXACTO (Video/Imagen)
+
+            document.getElementById('titulo').value = post.titulo || "";
+            document.getElementById('entrada').value = post.entrada || "";
+            document.getElementById('categoria').value = post.categoria || "principal";
+            document.getElementById('descripcion').value = post.descripcion || "";
+            document.getElementById('curiosidad').value = post.curiosidad || "";
+
+            const titleEl = document.getElementById('form-title');
+            titleEl.innerHTML = '<i class="fas fa-pen-nib"></i> EDITAR POST';
+            titleEl.classList.replace('text-[#39ff14]', 'text-yellow-400');
+            titleEl.nextElementSibling.classList.replace('bg-[#39ff14]', 'bg-yellow-400');
+            titleEl.nextElementSibling.classList.replace('shadow-[0_0_10px_#39ff14]', 'shadow-[0_0_10px_#facc15]');
+
+            btn.innerHTML = '<i class="fas fa-rotate mr-2"></i> ACTUALIZAR POST';
+            btn.classList.replace('bg-[#39ff14]', 'bg-yellow-400');
+            btn.classList.replace('shadow-[0_0_15px_rgba(57,255,20,0.15)]', 'shadow-[0_0_15px_rgba(250,204,21,0.15)]');
+            
+            document.getElementById('cancel-btn').classList.remove('hidden');
+            document.getElementById('cancel-btn').classList.add('block');
+            document.getElementById('submit-btn').classList.replace('w-full', 'w-2/3');
+            
+            // Mostrar indicador de "Conservar Multimedia"
+            document.getElementById('media-status').classList.remove('hidden');
+            document.getElementById('media-status').classList.add('flex');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 4. Cancelar Edición
+        window.cancelarEdicion = function() {
+            editModeId = null;
+            currentMediaUrl = null;
+            currentResourceType = null; // LIMPIAR TIPO
+            
+            document.getElementById('titulo').value = "";
+            document.getElementById('entrada').value = "";
+            document.getElementById('descripcion').value = "";
+            document.getElementById('curiosidad').value = "";
+            document.getElementById('archivoImg').value = "";
+            document.getElementById('archivoVid').value = "";
+            
+            resetFileLabels();
+
+            const titleEl = document.getElementById('form-title');
+            titleEl.innerHTML = '<i class="fas fa-pen-to-square"></i> NUEVO POST';
+            titleEl.classList.replace('text-yellow-400', 'text-[#39ff14]');
+            titleEl.nextElementSibling.classList.replace('bg-yellow-400', 'bg-[#39ff14]');
+            titleEl.nextElementSibling.classList.replace('shadow-[0_0_10px_#facc15]', 'shadow-[0_0_10px_#39ff14]');
+
+            btn.innerHTML = '<i class="fas fa-cloud-arrow-up mr-2"></i> SUBIR A LA RED';
+            btn.classList.replace('bg-yellow-400', 'bg-[#39ff14]');
+            btn.classList.replace('shadow-[0_0_15px_rgba(250,204,21,0.15)]', 'shadow-[0_0_15px_rgba(57,255,20,0.15)]');
+            
+            document.getElementById('cancel-btn').classList.add('hidden');
+            document.getElementById('cancel-btn').classList.remove('block');
+            document.getElementById('submit-btn').classList.replace('w-2/3', 'w-full');
+            
+            document.getElementById('media-status').classList.add('hidden');
+            document.getElementById('media-status').classList.remove('flex');
+            document.getElementById('mensaje').classList.add('hidden');
+            
+            // ASEGURAR QUE EL BOTÓN SE VUELVA A HABILITAR
+            btn.disabled = false;
+        }
+
+        // --- SUBIDA / ACTUALIZACIÓN ---
+        const CLOUD_NAME = 'dzsh3paco'; 
+        const UPLOAD_PRESET = 'fotos_tienda'; 
+
+        async function optimizarImagen(archivo) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(archivo);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const MAX_WIDTH = 1024; 
+                        let width = img.width;
+                        let height = img.height;
+                        if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                        canvas.width = width; canvas.height = height;
+                        ctx.drawImage(img, 0, 0, width, height);
+                        canvas.toBlob((blob) => resolve(blob), 'image/webp', 0.8);
+                    };
+                };
+            });
+        }
+
+        window.subirContenido = async function() {
+            const inputImg = document.getElementById('archivoImg');
+            const inputVid = document.getElementById('archivoVid');
+            const file = inputImg.files[0] || inputVid.files[0];
+            const titulo = document.getElementById('titulo').value;
+            
+            if (!titulo) { mostrarMensaje("El título es obligatorio", "error"); return; }
+            if (!file && !editModeId) { mostrarMensaje("Selecciona una Imagen o Vídeo", "error"); return; }
+
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> PROCESANDO...';
+            btn.disabled = true;
+            btn.classList.add('animate-pulse-green');
+
+            try {
+                let urlMedia = currentMediaUrl; 
+                let resourceType;
+                
+                // LÓGICA CRÍTICA PARA EVITAR BUGS DE TIPO
+                if (file) {
+                    // Si sube algo nuevo, detectamos qué es
+                    resourceType = file.type.startsWith('image/') ? 'image' : 'video';
+                } else {
+                    // Si NO sube nada nuevo, usamos estrictamente lo que tenía antes
+                    resourceType = currentResourceType || 'image'; 
+                }
+
+                if (file) {
+                    if (resourceType === 'video' && file.size > 50 * 1024 * 1024) {
+                        throw new Error("Vídeo demasiado pesado (Máx 50MB)");
+                    }
+
+                    let archivoParaSubir = file;
+
+                    if (resourceType === 'image') {
+                        const UMBRAL_PESADO = 1.5 * 1024 * 1024; 
+                        if (file.size > UMBRAL_PESADO) {
+                            const sizeMB = (file.size / 1024 / 1024).toFixed(2);
+                            const deseaReducir = confirm(`⚠️ El archivo es muy grande (${sizeMB} MB). \n\n¿Quieres reducirlo para que cargue rápido?`);
+                            
+                            if (deseaReducir) {
+                                mostrarMensaje("Optimizando imagen...", "success");
+                                archivoParaSubir = await optimizarImagen(file);
+                            } else {
+                                mostrarMensaje("Subiendo original...", "success");
+                            }
+                        }
+                    }
+
+                    btn.innerHTML = '<i class="fas fa-cloud-arrow-up mr-2"></i> SUBIENDO...';
+                    
+                    const formData = new FormData();
+                    formData.append('file', archivoParaSubir);
+                    formData.append('upload_preset', UPLOAD_PRESET);
+                    formData.append('resource_type', resourceType);
+
+                    // --- NUEVO: Nombre personalizado (nombre)-(random) ---
+                    // Limpiamos el nombre de caracteres extraños y añadimos un ID único
+                    const nombreBase = file.name.split('.').slice(0, -1).join('.').replace(/[^a-zA-Z0-9-_]/g, '_');
+                    const randomId = Math.random().toString(36).substring(2, 10);
+                    formData.append('public_id', `${nombreBase}-${randomId}`);
+
+                    if (resourceType === 'video') {
+                        urlMedia = await uploadWithProgress(formData, resourceType);
+                    } else {
+                        const resCloud = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${resourceType}/upload`, {
+                            method: 'POST', body: formData
+                        });
+                        
+                        const dataCloud = await resCloud.json();
+                        if (dataCloud.error) throw new Error(dataCloud.error.message);
+                        urlMedia = dataCloud.secure_url;
+                    }
+                }
+
+                btn.innerHTML = '<i class="fas fa-save mr-2"></i> GUARDANDO...';
+
+                const datosPost = {
+                    titulo: titulo,
+                    entrada: document.getElementById('entrada').value || "",
+                    categoria: document.getElementById('categoria').value,
+                    descripcion: document.getElementById('descripcion').value,
+                    curiosidad: document.getElementById('curiosidad').value,
+                    media_url: urlMedia,
+                    tipo: resourceType, // Usamos la variable segura
+                    autor_id: auth.currentUser ? auth.currentUser.uid : 'anonimo'
+                };
+
+                if (editModeId) {
+                    await updateDoc(doc(db, "productos", editModeId), datosPost);
+                    mostrarMensaje("¡Post actualizado correctamente!", "success");
+                } else {
+                    datosPost.fecha = serverTimestamp();
+                    await addDoc(collection(db, 'productos'), datosPost);
+                    mostrarMensaje("¡Post publicado con éxito!", "success");
+                }
+
+                btn.classList.remove('animate-pulse-green');
+                
+                setTimeout(() => {
+                    cancelarEdicion(); 
+                    cargarPosts();     
+                }, 1500);
+
+            } catch (error) {
+                console.error("Error:", error);
+                mostrarMensaje("Error: " + error.message, "error");
+                
+                // RESTAURAR BOTÓN EN CASO DE ERROR
+                if(!editModeId) {
+                    btn.innerHTML = '<i class="fas fa-cloud-arrow-up mr-2"></i> SUBIR A LA RED';
+                } else {
+                    btn.innerHTML = '<i class="fas fa-rotate mr-2"></i> ACTUALIZAR POST';
+                }
+                btn.disabled = false;
+                btn.classList.remove('animate-pulse-green');
+            }
+        }
+
+        // --- UTILIDADES ---
+        window.mostrarMensaje = function(texto, tipo) {
+            const msgDiv = document.getElementById('mensaje');
+            msgDiv.innerHTML = `<i class="fas ${tipo === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle'} mr-1"></i> ${texto}`;
+            msgDiv.className = `text-center p-3 rounded-2xl mb-4 text-xs font-bold ${tipo === 'success' ? 'bg-green-500/20 text-green-400 border border-green-500/50' : 'bg-red-500/20 text-red-400 border border-red-500/50'}`;
+            msgDiv.classList.remove('hidden');
+        }
+
+        window.autoExpand = function(field) {
+            field.style.height = 'inherit';
+            field.style.height = (field.scrollHeight + 2) + 'px';
+        };
+
+        function resetFileLabels() {
+            document.getElementById('label-Img').innerHTML = `
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-blue-500/0 group-hover:to-blue-500/10 transition-all duration-500"></div>
+                <i class="fas fa-camera text-xl mb-1 text-blue-400 group-hover:scale-110 transition-transform relative z-10"></i>
+                <span class="text-[9px] text-gray-500 uppercase font-bold group-hover:text-blue-300 relative z-10 transition-colors">Imagen</span>
+            `;
+            document.getElementById('label-Img').classList.remove('border-[#39ff14]/50', 'bg-[#39ff14]/5');
+            
+            document.getElementById('label-Vid').innerHTML = `
+                <div class="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-purple-500/0 group-hover:to-purple-500/10 transition-all duration-500"></div>
+                <i class="fas fa-clapperboard text-xl mb-1 text-purple-400 group-hover:scale-110 transition-transform relative z-10"></i>
+                <span class="text-[9px] text-gray-500 uppercase font-bold group-hover:text-purple-300 relative z-10 transition-colors">Vídeo</span>
+            `;
+            document.getElementById('label-Vid').classList.remove('border-[#39ff14]/50', 'bg-[#39ff14]/5');
+            
+            // Ocultar mensaje de conservar al resetear
+            if (editModeId) {
+                document.getElementById('media-status').classList.remove('hidden');
+                document.getElementById('media-status').classList.add('flex');
+            }
+        }
+
+        function handleFileSelect(input, type) {
+            const label = document.getElementById(`label-${type}`);
+            const otherInput = document.getElementById(type === 'Img' ? 'archivoVid' : 'archivoImg');
+            
+            if(input.files[0]) {
+                resetFileLabels(); 
+                const name = input.files[0].name;
+                label.innerHTML = `
+                    <span class="text-[#39ff14] text-center px-2 relative z-10 font-bold"><i class="fas fa-check mr-1"></i> ${name.substring(0, 15)}...</span>
+                    <div class="absolute inset-0 bg-[#39ff14]/5 z-0"></div>
                 `;
-            } else {
-                mediaWrapper.className = "w-full flex items-center justify-center relative mt-6"; 
-                mediaWrapper.innerHTML = `<img src="${post.media_url}" class="max-w-full max-h-[60vh] lg:max-h-[85vh] object-contain rounded-xl shadow-2xl cursor-zoom-in" ondblclick="openFullscreenImage('${post.media_url}')">`;
+                otherInput.value = "";
+                label.classList.add('border-[#39ff14]/50', 'bg-[#39ff14]/5');
+                
+                // Ocultar "Conservar anterior" porque ya eligió uno nuevo
+                document.getElementById('media-status').classList.add('hidden');
+                document.getElementById('media-status').classList.remove('flex');
             }
-            
-            document.getElementById('info-modal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-            
-            document.getElementById('bottom-dock').classList.add('hidden-dock');
         }
 
-        window.closeModal = function() {
-            document.getElementById('info-modal').classList.add('hidden');
-            document.getElementById('modal-media-wrapper').innerHTML = '';
-            document.body.style.overflow = '';
-            
-            document.getElementById('bottom-dock').classList.remove('hidden-dock');
+        window.onload = () => {
+            document.getElementById('archivoImg').addEventListener('change', (e) => handleFileSelect(e.target, 'Img'));
+            document.getElementById('archivoVid').addEventListener('change', (e) => handleFileSelect(e.target, 'Vid'));
         }
     </script>
 </body>
