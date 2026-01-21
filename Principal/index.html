@@ -317,14 +317,24 @@
                         // Mapeo EXACTO de tus claves en español a las variables internas
                         
                         // 1. Multimedia (Ruta del archivo o LINK de Dailymotion/Vidyard)
-                        const mediaUrl = item["Multimedia"] || "";
+                        let mediaUrl = item["Multimedia"] || "";
+
+                        // AUTO-CONVERSIÓN DE LINKS CORTOS (Dailymotion)
+                        // Convierte https://dai.ly/x9y6pvw -> https://geo.dailymotion.com/player.html?video=x9y6pvw
+                        if (mediaUrl.includes('dai.ly/')) {
+                            const parts = mediaUrl.split('dai.ly/');
+                            if (parts[1]) {
+                                const videoId = parts[1].split(/[?#]/)[0]; // Limpiamos ID de posibles parámetros
+                                mediaUrl = `https://geo.dailymotion.com/player.html?video=${videoId}`;
+                            }
+                        }
                         
-                        // Detectar tipo (video o imagen) INCLUYENDO LINKS EXTERNOS
-                        // Aquí es donde detecto si pusiste un link de Dailymotion, Vidyard, etc.
-                        const isVideo = mediaUrl.match(/\.(mp4|webm|mov)$/i) || 
+                        // Detectar tipo (video o imagen) INCLUYENDO LINKS EXTERNOS Y EXTENSIONES LOCALES
+                        const isVideo = mediaUrl.match(/\.(mp4|webm|mov|mkv)$/i) || 
                                         mediaUrl.includes('/video/') || 
                                         mediaUrl.includes('Videos/') ||
                                         mediaUrl.includes('dailymotion') ||
+                                        mediaUrl.includes('dai.ly') ||
                                         mediaUrl.includes('vidyard') ||
                                         mediaUrl.includes('youtube') ||
                                         mediaUrl.includes('embed');
@@ -381,7 +391,7 @@
             posts.forEach(post => {
                 window.allPosts[post.id] = post;
                 let catKey = post.categoria;
-                if(catKey === 'principal') catKey = 'home';
+                if(catKey === 'principal' || catKey === 'home') catKey = 'home';
                 
                 if (containers[catKey]) {
                     const containerId = post.tipo === 'video' ? containers[catKey].video : containers[catKey].visual;
@@ -395,28 +405,32 @@
             });
         }
 
-        // Función para renderizar CARD de Video (Maneja IFRAMES y MP4)
+        // Función para renderizar CARD de Video (Maneja IFRAMES y MP4/WEBM)
         function cardVideo(post) { 
-            // Verificamos si es un link externo (Dailymotion/Vidyard) o un MP4 local
-            const isEmbed = post.media_url.includes('dailymotion') || post.media_url.includes('vidyard') || post.media_url.includes('youtube') || post.media_url.includes('embed') || !post.media_url.includes('.mp4');
+            const isDirectFile = post.media_url.match(/\.(mp4|webm|mov|mkv)$/i);
+            const isEmbed = !isDirectFile;
             
             let contentVideo;
             
             if (isEmbed) {
-                // Es un link externo: Mostramos el iframe pero bloqueamos clicks para que abra el modal
+                // FORCE MUTE ON GRID PREVIEW (Evita doble voz)
+                // Añadimos &mute=1 y &autoplay=0 para asegurar que la miniatura no suene
+                const separator = post.media_url.includes('?') ? '&' : '?';
+                const gridUrl = `${post.media_url}${separator}mute=1&autoplay=0&controls=0`;
+
                 contentVideo = `
                     <div class="relative w-full h-full bg-black pointer-events-none">
                          <iframe 
-                            src="${post.media_url}" 
+                            src="${gridUrl}" 
                             class="w-full h-full object-cover opacity-80" 
                             frameborder="0"
-                            allow="autoplay; fullscreen"
+                            loading="lazy"
+                            allow="fullscreen" 
                             allowfullscreen
                          ></iframe>
                     </div>
                 `;
             } else {
-                // Es un archivo MP4 normal
                 contentVideo = `<video src="${post.media_url}#t=1.0" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" preload="metadata" muted playsinline oncontextmenu="return false;"></video>`;
             }
 
@@ -879,12 +893,23 @@
             if(post.tipo === 'video') {
                 mediaWrapper.className = "w-full aspect-video bg-black flex items-center justify-center relative rounded-b-3xl overflow-hidden mt-8 mb-4 border-y border-var(--card-border)";
                 
-                // DETECCIÓN DE IFRAME / LINK EXTERNO EN EL MODAL
-                if (post.media_url.includes('dailymotion') || post.media_url.includes('vidyard') || post.media_url.includes('youtube') || post.media_url.includes('embed') || !post.media_url.includes('.mp4')) {
-                     // Es un link externo (Dailymotion/Vidyard)
+                // DETECCIÓN DE VIDEO DIRECTO VS EMBED EN EL MODAL
+                const isDirectFile = post.media_url.match(/\.(mp4|webm|mov|mkv)$/i);
+                
+                if (!isDirectFile) {
+                    // MODO EMBED (Dailymotion/Vidyard)
+                    // ASEGURAR SONIDO ACTIVADO EN EL MODAL
+                    // Forzamos mute=0 y autoplay=1 si es posible
+                    let modalUrl = post.media_url;
+                    if (modalUrl.includes('?')) {
+                        modalUrl += '&autoplay=1&mute=0';
+                    } else {
+                        modalUrl += '?autoplay=1&mute=0';
+                    }
+
                     mediaWrapper.innerHTML = `
                         <iframe 
-                            src="${post.media_url}" 
+                            src="${modalUrl}" 
                             class="w-full h-full" 
                             frameborder="0"
                             allow="autoplay; fullscreen; picture-in-picture"
@@ -892,7 +917,6 @@
                         ></iframe>
                     `;
                 } else {
-                    // Es un archivo MP4 Local
                     mediaWrapper.innerHTML = `
                         <video controls autoplay class="relative z-10 w-full h-full max-h-[80vh] object-contain" oncontextmenu="return false;">
                             <source src="${post.media_url}" type="video/mp4">
