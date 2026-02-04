@@ -4,21 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     
-    <title>Interesante</title>
-    <link rel="icon" type="Imagenes/png" href="Imagenes/Sabias.png">
+    <!-- TÍTULO OPTIMIZADO: Marca + Palabras Clave -->
+    <title>Interesante | DevCenterX - Curiosidades, Videos y Plantillas</title>
+    
+    <link rel="icon" type="image/png" href="Imagenes/Sabias.png">
     <meta name="theme-color" content="#000000">
     
     <!-- Tailwind CSS & FontAwesome -->
     <script src="https://cdn.tailwindcss.com"></script>
-   
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-                 <!------ Meta data ------>
-    <meta name="robots" content="index, interesante, Adriel, cosas utiles, plantillas, curiosidades, videos, imagenes">
-    <meta name="description" content="Web sobre cosas muy iunteresantes y cosas utiles como plantillas.">
-    <meta name="author" content="Adriel">
+    <!-- ================= SEO PROFESIONAL ================= -->
+    <!-- Instrucciones para el Robot de Google -->
+    <meta name="robots" content="index, follow">
+    
+    <!-- Descripción: Lo que sale bajo el link azul en Google -->
+    <meta name="description" content="Explora el mundo con Interesante de DevCenterX. Descubre curiosidades sobre animales, el planeta y humanos. Descarga plantillas exclusivas y disfruta de contenido visual impactante.">
+    
+    <!-- Palabras Clave: Lo que la gente busca -->
+    <meta name="keywords" content="Interesante, DevCenterX, Adriel, curiosidades, datos curiosos, plantillas editables, videos de animales, planeta tierra, comportamiento humano, videos virales">
+    
+    <meta name="author" content="Adriel - DevCenterX">
     <meta name="publisher" content="DevCenterX">
-                 <!------ Meta data ------>
+    <link rel="canonical" href="https://interesante.devcenterx.workers.dev/">
+
+    <!-- ================= OPEN GRAPH (Para que se vea bien en WhatsApp/Facebook) ================= -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://interesante.devcenterx.workers.dev/">
+    <meta property="og:title" content="Interesante | DevCenterX">
+    <meta property="og:description" content="No es magia, es Interesante. Descubre curiosidades y descarga recursos visuales únicos.">
+    <meta property="og:image" content="https://interesante.devcenterx.workers.dev/Imagenes/Sabias.png"> <!-- Asegúrate que esta ruta sea accesible públicamente -->
+
+    <!-- ================= DATOS ESTRUCTURADOS (JSON-LD) ================= -->
+    <!-- Esto le explica a Google explícitamente qué es tu web -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Interesante",
+      "alternateName": "DevCenterX Interesante",
+      "url": "https://interesante.devcenterx.workers.dev/",
+      "author": {
+        "@type": "Person",
+        "name": "Adriel"
+      },
+      "description": "Plataforma de curiosidades, contenido visual y plantillas creada por DevCenterX."
+    }
+    </script>
+    <!-- ================= FIN SEO ================= -->
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Orbitron:wght@500;700;900&family=Outfit:wght@300;400;600;800&family=Syncopate:wght@700&family=Creepster&family=Berkshire+Swash&display=swap" rel="stylesheet">
@@ -842,9 +875,9 @@
             const icons = document.querySelectorAll('#bottom-dock i');
             icons.forEach(icon => {
                 if(icon.id !== 'dock-temporada') {
-                      icon.className = icon.className.replace(/text-(brand-neon|cyan-400|white)/g, ''); 
-                      icon.classList.remove('scale-110');
-                      icon.classList.add('text-gray-500');
+                       icon.className = icon.className.replace(/text-(brand-neon|cyan-400|white)/g, ''); 
+                       icon.classList.remove('scale-110');
+                       icon.classList.add('text-gray-500');
                 } else {
                     icon.classList.remove('scale-110');
                     icon.classList.remove('text-orange-400');
@@ -861,8 +894,8 @@
                 
                 if (activeId === 'home') activeIcon.classList.add('text-cyan-400');
                 else if (activeId === 'temporada') {
-                      activeIcon.classList.remove('text-orange-500'); 
-                      activeIcon.classList.add('text-orange-400');
+                       activeIcon.classList.remove('text-orange-500'); 
+                       activeIcon.classList.add('text-orange-400');
                 }
                 else activeIcon.classList.add('text-brand-neon');
             }
