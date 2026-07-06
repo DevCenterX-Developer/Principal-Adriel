@@ -140,6 +140,27 @@
                         </div>
                     </div>
 
+                    <div id="season-month-block" class="hidden">
+                        <label class="text-[10px] text-gray-500 uppercase font-bold ml-1 mb-1 block flex items-center gap-1.5">
+                            <i class="fas fa-calendar-day text-cyan-400"></i> Mes de Temporada
+                        </label>
+                        <select id="season-month" class="w-full p-3 xl:p-4 rounded-xl text-xs xl:text-sm outline-none appearance-none cursor-pointer">
+                            <option value="">Seleccionar mes</option>
+                            <option value="0">Enero</option>
+                            <option value="1">Febrero</option>
+                            <option value="2">Marzo</option>
+                            <option value="3">Abril</option>
+                            <option value="4">Mayo</option>
+                            <option value="5">Junio</option>
+                            <option value="6">Julio</option>
+                            <option value="7">Agosto</option>
+                            <option value="8">Septiembre</option>
+                            <option value="9">Octubre</option>
+                            <option value="10">Noviembre</option>
+                            <option value="11">Diciembre</option>
+                        </select>
+                    </div>
+
                     <!-- Descripción -->
                     <div>
                         <label class="text-[10px] text-gray-500 uppercase font-bold ml-1 mb-1 block flex items-center gap-1.5">
@@ -243,6 +264,38 @@
         let currentMediaUrl = null;
         let currentResourceType = null; // IMPORTANTE: Guarda si era video o imagen
         const btn = document.getElementById('submit-btn');
+
+        function parseMonthValue(value) {
+            if (value === undefined || value === null || value === '') return null;
+            if (typeof value === 'number' && !Number.isNaN(value) && value >= 0 && value <= 11) return value;
+            const normalized = String(value).trim().toLowerCase();
+            const map = {
+                enero: 0, ene: 0, febrero: 1, feb: 1, marzo: 2, mar: 2,
+                abril: 3, abr: 3, mayo: 4, may: 4, junio: 5, jun: 5,
+                julio: 6, jul: 6, agosto: 7, ago: 7, septiembre: 8, sep: 8,
+                octubre: 9, oct: 9, noviembre: 10, nov: 10, diciembre: 11, dic: 11
+            };
+            if (map[normalized] !== undefined) return map[normalized];
+            const parsedNumber = parseInt(normalized, 10);
+            if (!Number.isNaN(parsedNumber) && parsedNumber >= 0 && parsedNumber <= 11) return parsedNumber;
+            if (!Number.isNaN(parsedNumber) && parsedNumber >= 1 && parsedNumber <= 12) return parsedNumber - 1;
+            const parsedDate = new Date(normalized);
+            if (!Number.isNaN(parsedDate.getTime())) return parsedDate.getMonth();
+            return null;
+        }
+
+        function updateSeasonFieldVisibility() {
+            const category = document.getElementById('categoria').value.toLowerCase();
+            const block = document.getElementById('season-month-block');
+            if (!block) return;
+            if (category === 'temporada') {
+                block.classList.remove('hidden');
+            } else {
+                block.classList.add('hidden');
+            }
+        }
+
+        document.getElementById('categoria').addEventListener('change', updateSeasonFieldVisibility);
 
         // --- FUNCIONES DE SUBIDA ---
         function updateProgress(percent) {
@@ -486,6 +539,12 @@
             document.getElementById('descripcion').value = post.descripcion || "";
             document.getElementById('curiosidad').value = post.curiosidad || "";
 
+            const seasonMonth = post.seasonMonth !== undefined && post.seasonMonth !== null
+                ? parseMonthValue(post.seasonMonth)
+                : parseMonthValue(post.mes ?? post.Mes ?? post.Fecha ?? post.fecha);
+            document.getElementById('season-month').value = seasonMonth !== null ? String(seasonMonth) : "";
+            updateSeasonFieldVisibility();
+
             const titleEl = document.getElementById('form-title');
             titleEl.innerHTML = '<i class="fas fa-pen-nib"></i> EDITAR POST';
             titleEl.classList.replace('text-[#39ff14]', 'text-yellow-400');
@@ -517,6 +576,8 @@
             document.getElementById('entrada').value = "";
             document.getElementById('descripcion').value = "";
             document.getElementById('curiosidad').value = "";
+            document.getElementById('season-month').value = "";
+            updateSeasonFieldVisibility();
             document.getElementById('archivoImg').value = "";
             document.getElementById('archivoVid').value = "";
             
@@ -646,12 +707,25 @@
 
                 btn.innerHTML = '<i class="fas fa-save mr-2"></i> GUARDANDO...';
 
+                const seasonValue = document.getElementById('season-month').value;
+                const seasonMonth = seasonValue !== '' ? parseMonthValue(seasonValue) : null;
+                const categoriaValue = document.getElementById('categoria').value;
+
+                if (categoriaValue === 'temporada' && seasonMonth === null) {
+                    mostrarMensaje("Selecciona el mes de temporada para este post", "error");
+                    btn.innerHTML = '<i class="fas fa-cloud-arrow-up mr-2"></i> SUBIR A LA RED';
+                    btn.disabled = false;
+                    btn.classList.remove('animate-pulse-green');
+                    return;
+                }
+
                 const datosPost = {
                     titulo: titulo,
                     entrada: document.getElementById('entrada').value || "",
-                    categoria: document.getElementById('categoria').value,
+                    categoria: categoriaValue,
                     descripcion: document.getElementById('descripcion').value,
                     curiosidad: document.getElementById('curiosidad').value,
+                    seasonMonth: seasonMonth,
                     media_url: urlMedia,
                     tipo: resourceType, // Usamos la variable segura
                     autor_id: auth.currentUser ? auth.currentUser.uid : 'anonimo'

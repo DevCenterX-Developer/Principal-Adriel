@@ -306,7 +306,59 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        window.allPosts = {}; 
+        window.allPosts = {};
+        window.loadedPosts = [];
+        window.currentSeasonMonth = null;
+
+        function parseMonthValue(value) {
+            if (value === undefined || value === null) return null;
+            if (typeof value === 'number' && !Number.isNaN(value)) {
+                if (value >= 0 && value <= 11) return value;
+                if (value >= 1 && value <= 12) return value - 1;
+                return null;
+            }
+            const text = String(value).trim().toLowerCase();
+            if (!text) return null;
+
+            const monthNames = {
+                enero: 0, ene: 0, febrero: 1, feb: 1, marzo: 2, mar: 2,
+                abril: 3, abr: 3, mayo: 4, may: 4, junio: 5, jun: 5,
+                julio: 6, jul: 6, agosto: 7, ago: 7, septiembre: 8, sep: 8,
+                octubre: 9, oct: 9, noviembre: 10, nov: 10, diciembre: 11, dic: 11
+            };
+            if (monthNames[text] !== undefined) return monthNames[text];
+
+            const parsedNumber = parseInt(text, 10);
+            if (!Number.isNaN(parsedNumber)) {
+                if (parsedNumber >= 0 && parsedNumber <= 11) return parsedNumber;
+                if (parsedNumber >= 1 && parsedNumber <= 12) return parsedNumber - 1;
+            }
+
+            const parsedDate = new Date(text);
+            if (!Number.isNaN(parsedDate.getTime())) return parsedDate.getMonth();
+            return null;
+        }
+
+        function getSeasonMonthFromPost(post) {
+            if (!post) return null;
+            if (post.seasonMonth !== undefined && post.seasonMonth !== null) {
+                return parseMonthValue(post.seasonMonth);
+            }
+            if (post.fecha) {
+                if (typeof post.fecha === 'object' && post.fecha.seconds) {
+                    return new Date(post.fecha.seconds * 1000).getMonth();
+                }
+                const dateValue = new Date(post.fecha);
+                if (!Number.isNaN(dateValue.getTime())) {
+                    return dateValue.getMonth();
+                }
+            }
+            return parseMonthValue(post.mes || post.Mes || post.Fecha || post.fecha);
+        }
+
+        function getActiveSeasonMonth() {
+            return window.currentSeasonMonth !== null ? window.currentSeasonMonth : new Date().getMonth();
+        }
 
         async function loadContent() {
             let posts = [];
@@ -321,6 +373,7 @@
                     data.id = doc.id;
                     data.categoria = (data.categoria || 'principal').toLowerCase().trim();
                     if (!data.tipo) data.tipo = (data.media_url && (data.media_url.includes('.mp4') || data.media_url.includes('/video/'))) ? 'video' : 'image';
+                    data.seasonMonth = getSeasonMonthFromPost(data);
                     posts.push(data);
                 });
             } catch (e) {
@@ -358,6 +411,7 @@
                             // 6. Descripción (Texto largo en el modal)
                             descripcion: item["Descripción"] || "",
                             
+                            seasonMonth: parseMonthValue(item["Mes"] || item["mes"] || item["Fecha"] || item["fecha"]),
                             media_url: mediaUrl,
                             tipo: isVideo ? 'video' : 'image'
                         });
@@ -370,6 +424,7 @@
                 console.log("Error cargando manual.json:", e);
             }
 
+            window.loadedPosts = posts;
             renderPosts(posts);
         }
 
@@ -382,6 +437,8 @@
                 'humanos': { video: 'grid-humanos-videos', visual: 'grid-humanos-visual' },
                 'temporada': { video: 'grid-temporada-videos', visual: 'grid-temporada-visual' }
             };
+
+            const seasonFilter = getActiveSeasonMonth();
 
             // Limpiar contenedores antes de renderizar
             Object.values(containers).forEach(c => {
@@ -396,6 +453,11 @@
                 let catKey = post.categoria;
                 if(catKey === 'principal') catKey = 'home';
                 
+                if (catKey === 'temporada') {
+                    const postSeason = getSeasonMonthFromPost(post);
+                    if (postSeason === null || postSeason !== seasonFilter) return;
+                }
+
                 if (containers[catKey]) {
                     const containerId = post.tipo === 'video' ? containers[catKey].video : containers[catKey].visual;
                     const containerEl = document.getElementById(containerId);
@@ -703,6 +765,7 @@
         function applySeasonalTheme(monthIndex = null) {
             const date = new Date();
             const month = monthIndex !== null ? monthIndex : date.getMonth();
+            window.currentSeasonMonth = month;
             const theme = themes[month];
             
             const isLight = document.body.classList.contains('light-mode');
@@ -722,6 +785,10 @@
                         }; 
                     }, 500);
                 }
+            }
+
+            if (window.loadedPosts && window.loadedPosts.length) {
+                renderPosts(window.loadedPosts);
             }
         }
 
@@ -851,16 +918,21 @@
             document.getElementById('modal-fact').innerText = post.curiosidad || '...';
             
             const mediaWrapper = document.getElementById('modal-media-wrapper');
+            mediaWrapper.className = "w-full flex items-center justify-center relative bg-black transition-all";
             if(post.tipo === 'video') {
-                mediaWrapper.className = "w-full aspect-video bg-black flex items-center justify-center relative rounded-b-3xl overflow-hidden mt-8 mb-4 border-y border-var(--card-border)";
                 mediaWrapper.innerHTML = `
-                    <video controls autoplay class="relative z-10 w-full h-full max-h-[80vh] object-contain" oncontextmenu="return false;">
-                        <source src="${post.media_url}" type="video/mp4">
-                    </video>
+                    <div class="w-full max-w-[1200px] rounded-3xl overflow-hidden shadow-2xl border border-white/10">
+                        <video controls autoplay class="w-full h-auto max-h-[75vh] object-contain bg-black" oncontextmenu="return false;">
+                            <source src="${post.media_url}" type="video/mp4">
+                        </video>
+                    </div>
                 `;
             } else {
-                mediaWrapper.className = "w-full flex items-center justify-center relative mt-6"; 
-                mediaWrapper.innerHTML = `<img src="${post.media_url}" class="max-w-full max-h-[60vh] lg:max-h-[85vh] object-contain rounded-xl shadow-2xl cursor-zoom-in" ondblclick="openFullscreenImage('${post.media_url}')" oncontextmenu="return false;">`;
+                mediaWrapper.innerHTML = `
+                    <div class="w-full max-w-[1200px] rounded-3xl overflow-hidden shadow-2xl border border-white/10">
+                        <img src="${post.media_url}" class="w-full h-auto max-h-[80vh] object-contain" ondblclick="openFullscreenImage('${post.media_url}')" oncontextmenu="return false;" alt="${post.titulo}">
+                    </div>
+                `;
             }
             
             // Lógica para mostrar botón SOLO en Plantillas
